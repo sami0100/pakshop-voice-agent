@@ -438,6 +438,43 @@ function App() {
     scrollToProducts();
   };
 
+  /*
+   * Returns the customer to the main PakShop storefront.
+   *
+   * This is intentionally a single deterministic navigation action
+   * for voice requests such as:
+   * - go home
+   * - take me back to the main website
+   * - return to the store/storefront
+   * - close this quick view and go back
+   *
+   * It closes any open commerce overlay or product quick view,
+   * restores the default storefront filters, and scrolls to the top.
+   */
+  const goToHome = () => {
+    setSelectedProduct(null);
+    setSelectedSize("");
+    setSelectedQuantity(1);
+
+    setIsCartOpen(false);
+    setIsWishlistOpen(false);
+    setIsCheckoutOpen(false);
+    setIsOrdersOpen(false);
+    setIsMobileMenuOpen(false);
+
+    setSelectedOrder(null);
+    setOrderConfirmation(null);
+
+    setSearchTerm("");
+    setSelectedCategory("All");
+    setSortOption("featured");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const showBestSellers = () => {
     setSearchTerm("");
     setSelectedCategory("All");
@@ -2361,6 +2398,41 @@ function App() {
   ========================================================= */
 
   /*
+   * AI NAVIGATION TOOL
+   *
+   * Provides a real client-side action for requests such as
+   * "go home", "return to the main website", "back to the store",
+   * or equivalent requests in a language the assistant understands.
+   *
+   * Without this tool, the assistant might understand the request
+   * conversationally but have no deterministic React action to run.
+   */
+  const goToHomeTool = {
+    type: "function",
+
+    name: "go_to_home",
+
+    description:
+      "Returns the customer to the main PakShop storefront/home page. Use this whenever the customer asks to go home, return to the main website, return to the main page, go back to the store/storefront, or close the current product quick view and return to PakShop. Use it for equivalent requests in any language the assistant understands. This action must be used instead of only saying that navigation happened.",
+
+    parameters: {
+      type: "object",
+      properties: {},
+    },
+
+    execute: async () => {
+      goToHome();
+
+      return {
+        success: true,
+
+        message:
+          "Returned to the main PakShop storefront.",
+      };
+    },
+  };
+
+  /*
    * AI DISCOVERY TOOL #1
    *
    * This uses the exact same navigateToCategory()
@@ -3671,6 +3743,7 @@ You help customers:
 - place orders after explicit confirmation
 - view previous orders
 - track order status
+- return to the main PakShop storefront and close open product/commerce views when requested
 
 IMPORTANT:
 - Prices are in Pakistani Rupees (PKR).
@@ -3679,6 +3752,8 @@ IMPORTANT:
 - Recommend only products from the provided catalog.
 - Never invent products, prices, sizes, stock or order information.
 - Never claim that an action succeeded unless its tool reports success.
+- Never claim that you navigated, opened, closed, added, removed, changed, or updated something unless the corresponding client tool successfully performed that action.
+- When the customer asks to go home, return to the main website/main page, return to the store/storefront, or close a product quick view and go back, use go_to_home. Do not merely say that you returned to the main website.
 - When the customer asks to find, search for, look for, or show matching products, use search_products so the visible storefront changes instead of only verbally listing results.
 - When the customer explicitly asks the website to show, browse, display or switch to a product category, use the appropriate UI tool instead of merely verbally listing products.
 - If a tool changes the storefront, briefly confirm what was actually changed after the tool succeeds.
@@ -3749,6 +3824,7 @@ PAYMENT METHODS:
 
 TOOL RULES:
 
+- go_to_home: use this whenever the customer asks to go home, return to the main website/main page, go back to the PakShop store/storefront, or close the current product quick view and return. It closes open product/cart/wishlist/checkout/order views and returns the visible website to the main storefront.
 - search_products: use this whenever the customer asks to find, search for, look for, or display products matching a name, clothing type, collection, color, category, or keyword. It changes the visible storefront, so use it instead of only describing matching products.
 - filter_by_category: use this whenever the customer asks to show, browse, view, display or shop a particular product category. It changes the visible storefront, so use it instead of only describing the products.
 - add_to_wishlist: save a product.
@@ -8191,6 +8267,9 @@ TOOL RULES:
           pakShopContext
         }
         tools={[
+          /* Navigation */
+          goToHomeTool,
+
           /* Product discovery */
           filterByCategoryTool,
           searchProductsTool,
