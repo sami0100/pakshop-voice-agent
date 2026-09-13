@@ -6,11 +6,14 @@ import Customer from "../models/Customer.js";
 // Total Revenue
 // =====================================
 export const getRevenue = async (req, res) => {
+
   try {
 
     const result = await Order.aggregate([
+
       {
         $group: {
+
           _id: null,
 
           totalRevenue: {
@@ -20,8 +23,11 @@ export const getRevenue = async (req, res) => {
           totalOrders: {
             $sum: 1,
           },
+
         },
+
       },
+
     ]);
 
 
@@ -40,7 +46,9 @@ export const getRevenue = async (req, res) => {
     });
 
   }
+
 };
+
 
 
 
@@ -67,10 +75,13 @@ export const getRevenueByPeriod = async (req, res) => {
 
       {
         $match: {
+
           date: {
             $gte: startDate,
           },
+
         },
+
       },
 
 
@@ -88,6 +99,7 @@ export const getRevenueByPeriod = async (req, res) => {
           },
 
         },
+
       },
 
     ]);
@@ -110,12 +122,15 @@ export const getRevenueByPeriod = async (req, res) => {
   } catch (error) {
 
     res.status(500).json({
+
       message: error.message,
+
     });
 
   }
 
 };
+
 
 
 
@@ -127,9 +142,13 @@ export const getTopCustomers = async (req, res) => {
   try {
 
     const customers = await Customer.find()
+
       .sort({
+
         totalSpent: -1,
+
       })
+
       .limit(5);
 
 
@@ -139,13 +158,18 @@ export const getTopCustomers = async (req, res) => {
 
   } catch (error) {
 
+
     res.status(500).json({
+
       message: error.message,
+
     });
+
 
   }
 
 };
+
 
 
 
@@ -159,23 +183,31 @@ export const getTrendingProducts = async (req, res) => {
 
     const products = await Order.aggregate([
 
+
       {
         $unwind: "$items",
       },
 
 
+
       {
         $group: {
+
 
           _id: "$items.productId",
 
 
+
           unitsSold: {
+
             $sum: "$items.quantity",
+
           },
 
 
+
           revenue: {
+
             $sum: {
 
               $multiply: [
@@ -187,22 +219,76 @@ export const getTrendingProducts = async (req, res) => {
               ],
 
             },
+
           },
+
 
         },
 
       },
+
 
 
       {
         $sort: {
+
           unitsSold: -1,
+
         },
+
       },
+
 
 
       {
         $limit: 10,
+
+      },
+
+
+
+      {
+        $lookup: {
+
+          from: "products",
+
+          localField: "_id",
+
+          foreignField: "id",
+
+          as: "product",
+
+        },
+
+      },
+
+
+
+      {
+        $unwind: "$product",
+      },
+
+
+
+      {
+        $project: {
+
+          _id: 0,
+
+          productId: "$_id",
+
+          name: "$product.name",
+
+          category: "$product.category",
+
+          image: "$product.image",
+
+          unitsSold: 1,
+
+          revenue: 1,
+
+        },
+
       },
 
 
@@ -218,13 +304,16 @@ export const getTrendingProducts = async (req, res) => {
 
 
     res.status(500).json({
+
       message: error.message,
+
     });
 
 
   }
 
 };
+
 
 
 
@@ -239,50 +328,68 @@ export const getSalesTrend = async (req, res) => {
 
     const trend = await Order.aggregate([
 
+
       {
 
         $group: {
 
+
           _id: {
+
 
             $dateToString: {
 
+
               format: "%Y-%m-%d",
+
 
               date: "$date",
 
+
             },
+
 
           },
 
 
           revenue: {
 
+
             $sum: "$totalAmount",
+
 
           },
 
 
           orders: {
 
+
             $sum: 1,
+
 
           },
 
+
         },
 
+
       },
+
 
 
       {
 
         $sort: {
 
+
           _id: 1,
+
 
         },
 
+
       },
+
 
     ]);
 

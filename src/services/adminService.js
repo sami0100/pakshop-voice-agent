@@ -12,6 +12,7 @@ export async function getRevenue() {
 }
 
 
+
 export async function getTopCustomers() {
 
   const response = await fetch(
@@ -21,6 +22,7 @@ export async function getTopCustomers() {
   return await response.json();
 
 }
+
 
 
 export async function getTrendingProducts() {
@@ -34,6 +36,7 @@ export async function getTrendingProducts() {
 }
 
 
+
 export async function getSalesTrend() {
 
   const response = await fetch(
@@ -43,6 +46,7 @@ export async function getSalesTrend() {
   return await response.json();
 
 }
+
 
 
 export async function getLowStockItems() {
