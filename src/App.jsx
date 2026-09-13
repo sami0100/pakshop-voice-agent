@@ -142,15 +142,7 @@ const collectionCards = [
       "/products/classic-peshawari-chappal.webp",
   },
 ];
-console.log(
-  "AIROMOB APP ID:",
-  import.meta.env.VITE_AIROMOB_APP_ID
-);
 
-console.log(
-  "AIROMOB KEY EXISTS:",
-  Boolean(import.meta.env.VITE_AIROMOB_API_KEY)
-);
 function App() {
   /* =========================================================
      CART
@@ -7141,7 +7133,7 @@ TOOL RULES:
         initialContext={
           pakShopContext
         }
-        tools={[]}
+        tools={customerTools}
       />
     </div>
   );
