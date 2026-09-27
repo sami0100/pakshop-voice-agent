@@ -1,6 +1,7 @@
 import Order from "../models/Order.js";
 
 
+
 export const getOrders = async (req, res) => {
 
   try {
@@ -19,6 +20,8 @@ export const getOrders = async (req, res) => {
   }
 
 };
+
+
 
 
 
@@ -55,6 +58,8 @@ export const getOrderById = async (req, res) => {
 
 
 
+
+
 export const getCustomerOrders = async (req, res) => {
 
   try {
@@ -65,6 +70,76 @@ export const getCustomerOrders = async (req, res) => {
 
 
     res.json(orders);
+
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
+};
+
+
+
+
+
+export const createOrder = async (req, res) => {
+
+  try {
+
+    const order = new Order({
+
+      id: req.body.orderNumber,
+
+      customerId:
+        req.body.customerId,
+
+      date:
+        req.body.placedAt
+          ? new Date(req.body.placedAt)
+          : new Date(),
+
+
+      status:
+        req.body.status || "Processing",
+
+
+      items:
+        req.body.items.map((item) => ({
+
+          productId:
+            String(item.id),
+
+          quantity:
+            item.quantity,
+
+          price:
+            item.price,
+
+        })),
+
+
+      totalAmount:
+        req.body.total,
+
+
+      paymentMethod:
+        req.body.paymentMethod,
+
+    });
+
+
+
+    const savedOrder =
+      await order.save();
+
+
+
+    res.status(201).json(savedOrder);
+
 
 
   } catch (error) {

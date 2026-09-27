@@ -4,6 +4,7 @@ import {
   getOrders,
   getOrderById,
   getCustomerOrders,
+  createOrder,
 } from "../controllers/orderController.js";
 
 
@@ -14,6 +15,13 @@ const router = express.Router();
 router.get(
   "/",
   getOrders
+);
+
+
+
+router.post(
+  "/",
+  createOrder
 );
 
 

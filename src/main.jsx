@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-
+import TechnologyPage from "./pages/TechnologyPage.jsx";
 import {
   BrowserRouter,
   Routes,
@@ -72,7 +72,10 @@ createRoot(
             }
 
           />
-
+<Route
+  path="/technology"
+  element={<TechnologyPage />}
+/>
 
         </Routes>
 

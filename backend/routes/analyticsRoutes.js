@@ -6,6 +6,7 @@ import {
   getTopCustomers,
   getTrendingProducts,
   getSalesTrend,
+  getBusinessOverview,
 } from "../controllers/analyticsController.js";
 
 
@@ -39,6 +40,12 @@ router.get(
 router.get(
   "/sales-trend",
   getSalesTrend
+);
+
+
+router.get(
+  "/business-overview",
+  getBusinessOverview
 );
 
 

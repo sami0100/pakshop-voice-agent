@@ -99,7 +99,7 @@ export function createCustomerTools({
     name: "filter_by_category",
 
     description:
-      "Filters the visible PakShop storefront by product category. Use this when the customer asks to show, view, browse, shop, or display men's products, women's products, kids' products, footwear, or all products. This action changes the visible website instead of only describing products.",
+      "Filters the visible PakShop storefront by product category. Use this when the customer asks to show, view, browse, shop, or display Fashion, Electronics, Home, Beauty, Gaming, Sports & Fitness, Books, Accessories, or all products. This action changes the visible website instead of only describing products.",
 
     parameters: {
       type: "object",
@@ -110,10 +110,14 @@ export function createCustomerTools({
 
           enum: [
             "All",
-            "Men",
-            "Women",
-            "Kids",
-            "Footwear",
+            "Fashion",
+            "Electronics",
+            "Home",
+            "Beauty",
+            "Gaming",
+            "Sports & Fitness",
+            "Books",
+            "Accessories",
           ],
 
           description:
@@ -131,10 +135,14 @@ export function createCustomerTools({
     ) => {
       const allowedCategories = [
         "All",
-        "Men",
-        "Women",
-        "Kids",
-        "Footwear",
+        "Fashion",
+        "Electronics",
+        "Home",
+        "Beauty",
+        "Gaming",
+        "Sports & Fitness",
+        "Books",
+        "Accessories",
       ];
 
       const requestedCategory =
@@ -224,7 +232,7 @@ export function createCustomerTools({
     name: "search_products",
 
     description:
-      "Searches and visually filters the PakShop storefront. Use this when the customer asks to find, search for, look for, or show products by product name, clothing type, collection, color, category, or descriptive keyword. Examples include black kurta, lawn suits, maroon, Eid kurta, formal suit, kids festive dress, or Peshawari chappal. This action changes the visible website instead of only describing products.",
+      "Searches and visually filters the PakShop storefront. Use this when the customer asks to find, search for, look for, or show products by product name, product type, collection, color, category, subcategory, or descriptive keyword. Examples include black kurta, iPhone, gaming headset, air fryer, skincare, running shoes, business books, laptop backpack, or charger. This action changes the visible website instead of only describing products.",
 
     parameters: {
       type: "object",
@@ -234,7 +242,7 @@ export function createCustomerTools({
           type: "string",
 
           description:
-            "A concise PakShop product search phrase such as black kurta, lawn suits, maroon, Eid kurta, formal suit, kids festive dress, or Peshawari chappal.",
+            "A concise PakShop product search phrase such as black kurta, iPhone, headphones, air fryer, skincare, gaming mouse, running shoes, books, charger, or laptop backpack.",
         },
       },
 
@@ -333,8 +341,7 @@ export function createCustomerTools({
       };
     },
   };
-
-  const addToCartTool = {
+    const addToCartTool = {
     type: "function",
 
     name: "add_to_cart",
@@ -847,8 +854,7 @@ export function createCustomerTools({
 
       required: ["method"],
     },
-
-    execute: async (
+        execute: async (
       args
     ) => {
       const method =
@@ -1101,8 +1107,7 @@ export function createCustomerTools({
         )
       ),
   };
-
-  const openOrderHistoryTool = {
+    const openOrderHistoryTool = {
     type: "function",
 
     name:

@@ -162,6 +162,57 @@ export function createAdminTools() {
 
     },
 
+    {
+  type: "function",
+
+  name: "get_low_stock_items",
+
+  description:
+    "Get products that have low inventory and require restocking.",
+
+
+  parameters: {
+    type: "object",
+    properties: {},
+  },
+
+
+  execute: async () => {
+
+    const response = await fetch(
+      `${API_URL}/inventory/low-stock`
+    );
+
+
+    return await response.json();
+
+  },
+
+},
+{
+  type: "function",
+
+  name: "get_business_overview",
+
+  description:
+    "Get a complete executive overview of PakShop including total revenue, total orders, average order value, top customers, trending products, and low-stock inventory risks. Use this when the admin asks for a store summary, business overview, overall performance, how the store is doing, what needs attention, or a general business health report.",
+
+  parameters: {
+    type: "object",
+    properties: {},
+  },
+
+  execute: async () => {
+
+    const response = await fetch(
+      `${API_URL}/analytics/business-overview`
+    );
+
+    return await response.json();
+
+  },
+
+},
   ];
 
 }

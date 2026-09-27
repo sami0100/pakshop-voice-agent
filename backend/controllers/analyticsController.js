@@ -1,5 +1,6 @@
 import Order from "../models/Order.js";
 import Customer from "../models/Customer.js";
+import Inventory from "../models/Inventory.js";
 
 
 // =====================================
@@ -55,14 +56,13 @@ export const getRevenue = async (req, res) => {
 // =====================================
 // Revenue by Date Range
 // Example:
-// /api/v1/analytics/revenue?days=30
+// /api/v1/analytics/revenue-period?days=30
 // =====================================
 export const getRevenueByPeriod = async (req, res) => {
 
   try {
 
     const days = Number(req.query.days) || 30;
-
 
     const startDate = new Date();
 
@@ -84,7 +84,6 @@ export const getRevenueByPeriod = async (req, res) => {
 
       },
 
-
       {
         $group: {
 
@@ -105,7 +104,6 @@ export const getRevenueByPeriod = async (req, res) => {
     ]);
 
 
-
     res.json({
 
       period: `${days} days`,
@@ -122,9 +120,7 @@ export const getRevenueByPeriod = async (req, res) => {
   } catch (error) {
 
     res.status(500).json({
-
       message: error.message,
-
     });
 
   }
@@ -144,13 +140,10 @@ export const getTopCustomers = async (req, res) => {
     const customers = await Customer.find()
 
       .sort({
-
         totalSpent: -1,
-
       })
 
       .limit(5);
-
 
 
     res.json(customers);
@@ -158,13 +151,9 @@ export const getTopCustomers = async (req, res) => {
 
   } catch (error) {
 
-
     res.status(500).json({
-
       message: error.message,
-
     });
-
 
   }
 
@@ -180,72 +169,43 @@ export const getTrendingProducts = async (req, res) => {
 
   try {
 
-
     const products = await Order.aggregate([
-
 
       {
         $unwind: "$items",
       },
 
-
-
       {
         $group: {
 
-
           _id: "$items.productId",
 
-
-
           unitsSold: {
-
             $sum: "$items.quantity",
-
           },
-
-
 
           revenue: {
-
             $sum: {
-
               $multiply: [
-
                 "$items.quantity",
-
                 "$items.price",
-
               ],
-
             },
-
           },
-
 
         },
 
       },
-
-
 
       {
         $sort: {
-
           unitsSold: -1,
-
         },
-
       },
-
-
 
       {
         $limit: 10,
-
       },
-
-
 
       {
         $lookup: {
@@ -262,13 +222,9 @@ export const getTrendingProducts = async (req, res) => {
 
       },
 
-
-
       {
         $unwind: "$product",
       },
-
-
 
       {
         $project: {
@@ -291,24 +247,17 @@ export const getTrendingProducts = async (req, res) => {
 
       },
 
-
     ]);
-
 
 
     res.json(products);
 
 
-
   } catch (error) {
 
-
     res.status(500).json({
-
       message: error.message,
-
     });
-
 
   }
 
@@ -325,89 +274,331 @@ export const getSalesTrend = async (req, res) => {
 
   try {
 
-
     const trend = await Order.aggregate([
 
-
       {
-
         $group: {
-
 
           _id: {
 
-
             $dateToString: {
-
 
               format: "%Y-%m-%d",
 
-
               date: "$date",
-
 
             },
 
-
           },
-
 
           revenue: {
-
-
             $sum: "$totalAmount",
-
-
           },
-
 
           orders: {
-
-
             $sum: 1,
-
-
           },
 
-
         },
 
-
       },
-
-
 
       {
-
         $sort: {
-
-
           _id: 1,
-
-
         },
-
-
       },
 
-
     ]);
-
 
 
     res.json(trend);
 
 
-
   } catch (error) {
 
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
+};
+
+
+
+
+// =====================================
+// Business Overview
+// Combined executive summary for Admin AI
+// =====================================
+export const getBusinessOverview = async (req, res) => {
+
+  try {
+
+    const [
+      revenueResult,
+      topCustomers,
+      trendingProducts,
+      lowStockItems,
+    ] = await Promise.all([
+
+
+      Order.aggregate([
+
+        {
+          $group: {
+
+            _id: null,
+
+            totalRevenue: {
+              $sum: "$totalAmount",
+            },
+
+            totalOrders: {
+              $sum: 1,
+            },
+
+            averageOrderValue: {
+              $avg: "$totalAmount",
+            },
+
+          },
+
+        },
+
+      ]),
+
+
+
+      Customer.find()
+
+        .sort({
+          totalSpent: -1,
+        })
+
+        .limit(5),
+
+
+
+      Order.aggregate([
+
+        {
+          $unwind: "$items",
+        },
+
+        {
+          $group: {
+
+            _id: "$items.productId",
+
+            unitsSold: {
+              $sum: "$items.quantity",
+            },
+
+            revenue: {
+              $sum: {
+                $multiply: [
+                  "$items.quantity",
+                  "$items.price",
+                ],
+              },
+            },
+
+          },
+
+        },
+
+        {
+          $sort: {
+            unitsSold: -1,
+          },
+        },
+
+        {
+          $limit: 5,
+        },
+
+        {
+          $lookup: {
+
+            from: "products",
+
+            localField: "_id",
+
+            foreignField: "id",
+
+            as: "product",
+
+          },
+
+        },
+
+        {
+          $unwind: {
+            path: "$product",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+
+        {
+          $project: {
+
+            _id: 0,
+
+            productId: "$_id",
+
+            name: "$product.name",
+
+            category: "$product.category",
+
+            image: "$product.image",
+
+            unitsSold: 1,
+
+            revenue: 1,
+
+          },
+
+        },
+
+      ]),
+
+
+
+      Inventory.aggregate([
+
+        {
+          $match: {
+
+            $expr: {
+
+              $lt: [
+                "$stock",
+                "$lowStockThreshold",
+              ],
+
+            },
+
+          },
+
+        },
+
+        {
+          $lookup: {
+
+            from: "products",
+
+            localField: "productId",
+
+            foreignField: "id",
+
+            as: "product",
+
+          },
+
+        },
+
+        {
+          $unwind: {
+
+            path: "$product",
+
+            preserveNullAndEmptyArrays: true,
+
+          },
+
+        },
+
+        {
+          $project: {
+
+            _id: 0,
+
+            productId: 1,
+
+            stock: 1,
+
+            reserved: 1,
+
+            lowStockThreshold: 1,
+
+            warehouse: 1,
+
+            name: "$product.name",
+
+            category: "$product.category",
+
+            image: "$product.image",
+
+          },
+
+        },
+
+      ]),
+
+    ]);
+
+
+    const revenue =
+      revenueResult[0] || {
+        totalRevenue: 0,
+        totalOrders: 0,
+        averageOrderValue: 0,
+      };
+
+
+    res.json({
+
+      revenue: {
+        totalRevenue:
+          revenue.totalRevenue || 0,
+
+        totalOrders:
+          revenue.totalOrders || 0,
+
+        averageOrderValue:
+          Math.round(
+            revenue.averageOrderValue || 0
+          ),
+      },
+
+
+      topCustomer:
+        topCustomers?.[0] || null,
+
+
+      topCustomers,
+
+
+      topProduct:
+        trendingProducts?.[0] || null,
+
+
+      trendingProducts,
+
+
+      inventoryRisks:
+        lowStockItems,
+
+
+      inventoryRiskCount:
+        lowStockItems.length,
+
+
+      generatedAt:
+        new Date().toISOString(),
+
+    });
+
+
+  } catch (error) {
 
     res.status(500).json({
 
       message: error.message,
 
     });
-
 
   }
 

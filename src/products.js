@@ -3,268 +3,208 @@ export const products = [
     id: 1,
     slug: "black-cotton-kurta",
     name: "Black Cotton Kurta",
-    category: "Men",
+    category: "Fashion",
+    subCategory: "Men",
     collection: "Everyday Essentials",
-
     image: "/products/black-cotton-kurta.webp",
-
     price: 3499,
     originalPrice: 3999,
-
     sizes: ["S", "M", "L", "XL"],
     colors: ["Black"],
     color: "Black",
-
     stock: 18,
-
     rating: 4.8,
     reviews: 124,
-
     badge: "Best Seller",
-
     description:
-      "A premium breathable cotton kurta designed for everyday comfort with a clean traditional silhouette.",
+      "A premium breathable cotton kurta for men, designed for everyday comfort with a clean traditional silhouette.",
   },
 
   {
     id: 2,
     slug: "navy-blue-shalwar-kameez",
     name: "Navy Blue Shalwar Kameez",
-    category: "Men",
+    category: "Fashion",
+    subCategory: "Men",
     collection: "Classic Wear",
-
     image: "/products/navy-blue-shalwar-kameez.webp",
-
     price: 4499,
     originalPrice: 4999,
-
     sizes: ["M", "L", "XL"],
     colors: ["Navy Blue"],
     color: "Navy Blue",
-
     stock: 12,
-
     rating: 4.7,
     reviews: 89,
-
     badge: "Popular",
-
     description:
-      "A refined navy blue shalwar kameez crafted for formal gatherings and traditional occasions.",
+      "A refined men's navy blue shalwar kameez crafted for formal gatherings and traditional occasions.",
   },
 
   {
     id: 3,
     slug: "emerald-lawn-3-piece-suit",
     name: "Premium Lawn 3-Piece Suit",
-    category: "Women",
+    category: "Fashion",
+    subCategory: "Women",
     collection: "Summer Lawn",
-
     image: "/products/emerald-lawn-3-piece-suit.webp",
-
     price: 5999,
     originalPrice: 6999,
-
     sizes: ["S", "M", "L"],
     colors: ["Emerald"],
     color: "Emerald",
-
     stock: 15,
-
     rating: 4.9,
     reviews: 168,
-
     badge: "Trending",
-
     description:
-      "An elegant emerald three-piece lawn suit featuring premium fabric and graceful seasonal styling.",
+      "An elegant women's emerald three-piece lawn suit featuring premium fabric and graceful seasonal styling.",
   },
 
   {
     id: 4,
     slug: "embroidered-eid-kurta",
     name: "Embroidered Eid Kurta",
-    category: "Men",
+    category: "Fashion",
+    subCategory: "Men",
     collection: "Eid Collection",
-
     image: "/products/embroidered-eid-kurta.webp",
-
     price: 6499,
     originalPrice: 7499,
-
     sizes: ["M", "L", "XL"],
     colors: ["White"],
     color: "White",
-
     stock: 9,
-
     rating: 4.9,
     reviews: 137,
-
     badge: "Eid Exclusive",
-
     description:
-      "A sophisticated white embroidered kurta with refined detailing, designed especially for Eid celebrations.",
+      "A sophisticated men's white embroidered kurta with refined detailing, designed especially for Eid celebrations.",
   },
 
   {
     id: 5,
     slug: "maroon-embroidered-kurta",
     name: "Maroon Embroidered Kurta",
-    category: "Men",
+    category: "Fashion",
+    subCategory: "Men",
     collection: "Festive Wear",
-
     image: "/products/maroon-embroidered-kurta.webp",
-
     price: 5499,
     originalPrice: 6299,
-
     sizes: ["S", "M", "L", "XL"],
     colors: ["Maroon"],
     color: "Maroon",
-
     stock: 14,
-
     rating: 4.6,
     reviews: 74,
-
     badge: "New",
-
     description:
-      "A rich maroon festive kurta with subtle embroidery and a tailored contemporary fit.",
+      "A rich men's maroon festive kurta with subtle embroidery and a tailored contemporary fit.",
   },
 
   {
     id: 6,
     slug: "olive-green-waistcoat",
     name: "Olive Green Waistcoat",
-    category: "Men",
+    category: "Fashion",
+    subCategory: "Men",
     collection: "Formal Wear",
-
     image: "/products/olive-green-waistcoat.webp",
-
     price: 3999,
     originalPrice: 4599,
-
     sizes: ["M", "L", "XL"],
     colors: ["Olive Green"],
     color: "Olive Green",
-
     stock: 11,
-
     rating: 4.5,
     reviews: 53,
-
     badge: null,
-
     description:
-      "A structured olive green traditional waistcoat ideal for pairing with kurtas and shalwar kameez.",
+      "A structured men's olive green traditional waistcoat ideal for pairing with kurtas and shalwar kameez.",
   },
 
   {
     id: 7,
     slug: "rose-pink-lawn-suit",
     name: "Rose Pink Lawn Suit",
-    category: "Women",
+    category: "Fashion",
+    subCategory: "Women",
     collection: "Summer Lawn",
-
     image: "/products/rose-pink-lawn-suit.webp",
-
     price: 5299,
     originalPrice: 5999,
-
     sizes: ["S", "M", "L"],
     colors: ["Rose Pink"],
     color: "Rose Pink",
-
     stock: 16,
-
     rating: 4.8,
     reviews: 112,
-
     badge: "Popular",
-
     description:
-      "A lightweight rose pink lawn ensemble designed for comfort and effortless summer elegance.",
+      "A lightweight women's rose pink lawn ensemble designed for comfort and effortless summer elegance.",
   },
 
   {
     id: 8,
     slug: "midnight-blue-formal-suit",
     name: "Midnight Blue Formal Suit",
-    category: "Women",
+    category: "Fashion",
+    subCategory: "Women",
     collection: "Formal Wear",
-
     image: "/products/midnight-blue-formal-suit.webp",
-
     price: 8499,
     originalPrice: 9999,
-
     sizes: ["S", "M", "L"],
     colors: ["Midnight Blue"],
     color: "Midnight Blue",
-
     stock: 7,
-
     rating: 4.9,
     reviews: 96,
-
     badge: "Premium",
-
     description:
-      "A luxurious midnight blue formal outfit with refined detailing for weddings, dinners and special occasions.",
+      "A luxurious women's midnight blue formal outfit with refined detailing for weddings, dinners and special occasions.",
   },
 
   {
     id: 9,
     slug: "mustard-khaddar-suit",
     name: "Mustard Khaddar Suit",
-    category: "Women",
+    category: "Fashion",
+    subCategory: "Women",
     collection: "Winter Edit",
-
     image: "/products/mustard-khaddar-suit.webp",
-
     price: 6799,
     originalPrice: 7499,
-
     sizes: ["S", "M", "L", "XL"],
     colors: ["Mustard"],
     color: "Mustard",
-
     stock: 10,
-
     rating: 4.7,
     reviews: 81,
-
     badge: "Seasonal",
-
     description:
-      "A warm mustard khaddar suit combining traditional winter fabric with a modern Pakistani silhouette.",
+      "A warm women's mustard khaddar suit combining traditional winter fabric with a modern Pakistani silhouette.",
   },
 
   {
     id: 10,
     slug: "boys-white-eid-kurta",
     name: "Boys White Eid Kurta",
-    category: "Kids",
+    category: "Fashion",
+    subCategory: "Kids",
     collection: "Kids Eid",
-
     image: "/products/boys-white-eid-kurta.webp",
-
     price: 2499,
     originalPrice: 2999,
-
     sizes: ["4Y", "6Y", "8Y", "10Y"],
     colors: ["White"],
     color: "White",
-
     stock: 20,
-
     rating: 4.7,
     reviews: 64,
-
     badge: "Eid Pick",
-
     description:
       "A comfortable white kurta for boys featuring festive detailing and soft breathable fabric.",
   },
@@ -273,53 +213,918 @@ export const products = [
     id: 11,
     slug: "girls-peach-festive-dress",
     name: "Girls Peach Festive Dress",
-    category: "Kids",
+    category: "Fashion",
+    subCategory: "Kids",
     collection: "Kids Festive",
-
     image: "/products/girls-peach-festive-dress.webp",
-
     price: 3299,
     originalPrice: 3899,
-
     sizes: ["4Y", "6Y", "8Y", "10Y"],
     colors: ["Peach"],
     color: "Peach",
-
     stock: 13,
-
     rating: 4.8,
     reviews: 58,
-
     badge: "New",
-
     description:
-      "A charming peach festive dress created for weddings, Eid and family celebrations.",
+      "A charming peach festive dress for girls, created for weddings, Eid and family celebrations.",
   },
 
   {
     id: 12,
     slug: "classic-peshawari-chappal",
     name: "Classic Peshawari Chappal",
-    category: "Footwear",
+    category: "Fashion",
+    subCategory: "Footwear",
     collection: "Traditional Accessories",
-
     image: "/products/classic-peshawari-chappal.webp",
-
     price: 4499,
     originalPrice: 4999,
-
     sizes: ["40", "41", "42", "43", "44"],
     colors: ["Brown"],
     color: "Brown",
-
     stock: 22,
-
     rating: 4.8,
     reviews: 146,
-
     badge: "Best Seller",
-
     description:
-      "A premium brown Peshawari chappal designed to complement traditional Pakistani menswear.",
+      "A premium brown Peshawari chappal for men, designed to complement traditional Pakistani fashion.",
+  },
+    {
+    id: 13,
+    slug: "iphone-16-pro",
+    name: "iPhone 16 Pro",
+    category: "Electronics",
+    subCategory: "Smartphones",
+    collection: "Premium Smartphones",
+    image:
+      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=900&q=80",
+    price: 389999,
+    originalPrice: 409999,
+    sizes: ["128GB", "256GB", "512GB"],
+    colors: ["Black Titanium", "Natural Titanium"],
+    color: "Black Titanium",
+    stock: 8,
+    rating: 4.9,
+    reviews: 318,
+    badge: "Premium",
+    description:
+      "A flagship Apple smartphone with a premium titanium design, powerful performance and advanced camera system.",
+  },
+
+  {
+    id: 14,
+    slug: "samsung-galaxy-s25-ultra",
+    name: "Samsung Galaxy S25 Ultra",
+    category: "Electronics",
+    subCategory: "Smartphones",
+    collection: "Premium Smartphones",
+    image:
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80",
+    price: 429999,
+    originalPrice: 449999,
+    sizes: ["256GB", "512GB"],
+    colors: ["Titanium Black", "Titanium Gray"],
+    color: "Titanium Black",
+    stock: 10,
+    rating: 4.8,
+    reviews: 284,
+    badge: "Trending",
+    description:
+      "A premium Android smartphone with a large display, advanced cameras and productivity-focused performance.",
+  },
+
+  {
+    id: 15,
+    slug: "macbook-air-m3",
+    name: "MacBook Air M3",
+    category: "Electronics",
+    subCategory: "Laptops",
+    collection: "Work & Study",
+    image:
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80",
+    price: 319999,
+    originalPrice: 339999,
+    sizes: ["256GB", "512GB"],
+    colors: ["Midnight", "Silver"],
+    color: "Midnight",
+    stock: 7,
+    rating: 4.9,
+    reviews: 205,
+    badge: "Best Seller",
+    description:
+      "A lightweight Apple laptop built for work, study and everyday productivity with long battery life.",
+  },
+
+  {
+    id: 16,
+    slug: "sony-wh1000xm5",
+    name: "Sony WH-1000XM5 Headphones",
+    category: "Electronics",
+    subCategory: "Audio",
+    collection: "Premium Audio",
+    image:
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=80",
+    price: 89999,
+    originalPrice: 94999,
+    sizes: ["Standard"],
+    colors: ["Black", "Silver"],
+    color: "Black",
+    stock: 14,
+    rating: 4.8,
+    reviews: 411,
+    badge: "Top Rated",
+    description:
+      "Premium wireless noise-cancelling headphones built for immersive music, calls and travel.",
+  },
+
+  {
+    id: 17,
+    slug: "apple-watch-series-10",
+    name: "Apple Watch Series 10",
+    category: "Electronics",
+    subCategory: "Smartwatches",
+    collection: "Wearable Tech",
+    image:
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+    price: 124999,
+    originalPrice: 134999,
+    sizes: ["42mm", "46mm"],
+    colors: ["Jet Black", "Silver"],
+    color: "Jet Black",
+    stock: 12,
+    rating: 4.7,
+    reviews: 189,
+    badge: "New",
+    description:
+      "A modern smartwatch for health tracking, notifications, workouts and everyday connectivity.",
+  },
+
+  {
+    id: 18,
+    slug: "jbl-flip-6",
+    name: "JBL Flip 6 Bluetooth Speaker",
+    category: "Electronics",
+    subCategory: "Audio",
+    collection: "Portable Audio",
+    image:
+      "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=900&q=80",
+    price: 32999,
+    originalPrice: 36999,
+    sizes: ["Standard"],
+    colors: ["Black", "Blue", "Red"],
+    color: "Black",
+    stock: 21,
+    rating: 4.7,
+    reviews: 263,
+    badge: "Popular",
+    description:
+      "A portable waterproof Bluetooth speaker with powerful sound for home, travel and outdoor use.",
+  },
+
+  {
+    id: 19,
+    slug: "anker-powercore-20000",
+    name: "Anker PowerCore 20000 Power Bank",
+    category: "Electronics",
+    subCategory: "Power",
+    collection: "Mobile Essentials",
+    image:
+      "https://images.unsplash.com/photo-1609592806596-b43bada2f4f4?auto=format&fit=crop&w=900&q=80",
+    price: 14999,
+    originalPrice: 16999,
+    sizes: ["20000mAh"],
+    colors: ["Black"],
+    color: "Black",
+    stock: 30,
+    rating: 4.6,
+    reviews: 356,
+    badge: "Best Seller",
+    description:
+      "A high-capacity portable power bank designed to keep phones and everyday devices charged on the go.",
+  },
+
+  {
+    id: 20,
+    slug: "logitech-mx-master-3s",
+    name: "Logitech MX Master 3S Mouse",
+    category: "Electronics",
+    subCategory: "Computer Accessories",
+    collection: "Productivity Gear",
+    image:
+      "https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=900&q=80",
+    price: 27999,
+    originalPrice: 30999,
+    sizes: ["Standard"],
+    colors: ["Graphite", "Pale Gray"],
+    color: "Graphite",
+    stock: 16,
+    rating: 4.9,
+    reviews: 230,
+    badge: "Top Rated",
+    description:
+      "A premium wireless productivity mouse with precise tracking, quiet clicks and customizable controls.",
+  },
+
+  {
+    id: 21,
+    slug: "modern-living-room-sofa",
+    name: "Modern Living Room Sofa",
+    category: "Home",
+    subCategory: "Furniture",
+    collection: "Modern Living",
+    image:
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=900&q=80",
+    price: 84999,
+    originalPrice: 94999,
+    sizes: ["3 Seater"],
+    colors: ["Beige", "Gray"],
+    color: "Beige",
+    stock: 8,
+    rating: 4.7,
+    reviews: 76,
+    badge: "Popular",
+    description:
+      "A comfortable modern three-seater sofa designed for contemporary living rooms and family spaces.",
+  },
+
+  {
+    id: 22,
+    slug: "philips-air-fryer",
+    name: "Philips Digital Air Fryer",
+    category: "Home",
+    subCategory: "Kitchen Appliances",
+    collection: "Smart Kitchen",
+    image:
+      "https://images.unsplash.com/photo-1585515320310-259814833e62?auto=format&fit=crop&w=900&q=80",
+    price: 44999,
+    originalPrice: 49999,
+    sizes: ["4.1L"],
+    colors: ["Black"],
+    color: "Black",
+    stock: 13,
+    rating: 4.8,
+    reviews: 194,
+    badge: "Best Seller",
+    description:
+      "A digital air fryer for convenient lower-oil cooking with simple temperature and timer controls.",
+  },
+
+  {
+    id: 23,
+    slug: "nespresso-coffee-machine",
+    name: "Nespresso Coffee Machine",
+    category: "Home",
+    subCategory: "Kitchen Appliances",
+    collection: "Coffee Corner",
+    image:
+      "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=900&q=80",
+    price: 58999,
+    originalPrice: 64999,
+    sizes: ["Standard"],
+    colors: ["Black", "White"],
+    color: "Black",
+    stock: 9,
+    rating: 4.7,
+    reviews: 142,
+    badge: "Premium",
+    description:
+      "A compact capsule coffee machine for fast espresso and coffee at home or in the office.",
+  },
+
+  {
+    id: 24,
+    slug: "ceramic-cookware-set",
+    name: "12-Piece Ceramic Cookware Set",
+    category: "Home",
+    subCategory: "Kitchen",
+    collection: "Kitchen Essentials",
+    image:
+      "https://images.unsplash.com/photo-1584990347449-a4141aa3d7fd?auto=format&fit=crop&w=900&q=80",
+    price: 24999,
+    originalPrice: 28999,
+    sizes: ["12 Piece"],
+    colors: ["Cream"],
+    color: "Cream",
+    stock: 18,
+    rating: 4.6,
+    reviews: 118,
+    badge: "Value Pick",
+    description:
+      "A versatile ceramic cookware set for everyday home cooking with a clean modern finish.",
+  },
+
+  {
+    id: 25,
+    slug: "minimalist-table-lamp",
+    name: "Minimalist Table Lamp",
+    category: "Home",
+    subCategory: "Lighting",
+    collection: "Home Decor",
+    image:
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=900&q=80",
+    price: 7999,
+    originalPrice: 9499,
+    sizes: ["Standard"],
+    colors: ["White", "Black"],
+    color: "White",
+    stock: 26,
+    rating: 4.5,
+    reviews: 91,
+    badge: "New",
+    description:
+      "A minimalist bedside or desk lamp that adds soft lighting to bedrooms, offices and reading spaces.",
+  },
+
+  {
+    id: 26,
+    slug: "premium-cotton-bedsheet-set",
+    name: "Premium Cotton Bedsheet Set",
+    category: "Home",
+    subCategory: "Bedding",
+    collection: "Bedroom Comfort",
+    image:
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80",
+    price: 8999,
+    originalPrice: 10999,
+    sizes: ["King", "Queen"],
+    colors: ["White", "Sage"],
+    color: "White",
+    stock: 24,
+    rating: 4.7,
+    reviews: 154,
+    badge: "Popular",
+    description:
+      "A soft premium cotton bedsheet set designed for comfortable everyday sleeping and a clean bedroom look.",
+  },
+    {
+    id: 27,
+    slug: "cerave-hydrating-cleanser",
+    name: "CeraVe Hydrating Facial Cleanser",
+    category: "Beauty",
+    subCategory: "Skincare",
+    collection: "Daily Skincare",
+    image:
+      "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=80",
+    price: 6499,
+    originalPrice: 7499,
+    sizes: ["236ml"],
+    colors: ["White"],
+    color: "White",
+    stock: 25,
+    rating: 4.8,
+    reviews: 346,
+    badge: "Derm Favorite",
+    description:
+      "A gentle hydrating facial cleanser for everyday skincare and normal-to-dry skin routines.",
+  },
+
+  {
+    id: 28,
+    slug: "the-ordinary-niacinamide",
+    name: "The Ordinary Niacinamide Serum",
+    category: "Beauty",
+    subCategory: "Skincare",
+    collection: "Serums",
+    image:
+      "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=900&q=80",
+    price: 4999,
+    originalPrice: 5799,
+    sizes: ["30ml"],
+    colors: ["Clear"],
+    color: "Clear",
+    stock: 31,
+    rating: 4.7,
+    reviews: 402,
+    badge: "Best Seller",
+    description:
+      "A lightweight niacinamide serum designed to support clearer-looking skin and balanced daily skincare.",
+  },
+
+  {
+    id: 29,
+    slug: "dior-sauvage-eau-de-parfum",
+    name: "Dior Sauvage Eau de Parfum",
+    category: "Beauty",
+    subCategory: "Fragrance",
+    collection: "Luxury Fragrance",
+    image:
+      "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+    price: 44999,
+    originalPrice: 48999,
+    sizes: ["60ml", "100ml"],
+    colors: ["Navy"],
+    color: "Navy",
+    stock: 11,
+    rating: 4.9,
+    reviews: 225,
+    badge: "Premium",
+    description:
+      "A bold men's fragrance with a fresh aromatic profile for evenings, occasions and everyday wear.",
+  },
+
+  {
+    id: 30,
+    slug: "dyson-supersonic-hair-dryer",
+    name: "Dyson Supersonic Hair Dryer",
+    category: "Beauty",
+    subCategory: "Hair Care",
+    collection: "Beauty Tech",
+    image:
+      "https://images.unsplash.com/photo-1522338140262-f46f5913618a?auto=format&fit=crop&w=900&q=80",
+    price: 139999,
+    originalPrice: 149999,
+    sizes: ["Standard"],
+    colors: ["Nickel", "Pink"],
+    color: "Nickel",
+    stock: 6,
+    rating: 4.8,
+    reviews: 167,
+    badge: "Luxury",
+    description:
+      "A premium high-speed hair dryer designed for controlled styling and efficient everyday hair care.",
+  },
+
+  {
+    id: 31,
+    slug: "maybelline-sky-high-mascara",
+    name: "Maybelline Sky High Mascara",
+    category: "Beauty",
+    subCategory: "Makeup",
+    collection: "Everyday Makeup",
+    image:
+      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=900&q=80",
+    price: 4499,
+    originalPrice: 5199,
+    sizes: ["Standard"],
+    colors: ["Black"],
+    color: "Black",
+    stock: 29,
+    rating: 4.6,
+    reviews: 312,
+    badge: "Popular",
+    description:
+      "A lightweight black mascara designed for length, definition and everyday makeup looks.",
+  },
+
+  {
+    id: 32,
+    slug: "playstation-5-slim",
+    name: "PlayStation 5 Slim",
+    category: "Gaming",
+    subCategory: "Consoles",
+    collection: "Next-Gen Gaming",
+    image:
+      "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=900&q=80",
+    price: 189999,
+    originalPrice: 199999,
+    sizes: ["Disc Edition"],
+    colors: ["White"],
+    color: "White",
+    stock: 7,
+    rating: 4.9,
+    reviews: 276,
+    badge: "Hot",
+    description:
+      "A next-generation gaming console built for high-performance games, fast loading and immersive entertainment.",
+  },
+
+  {
+    id: 33,
+    slug: "xbox-wireless-controller",
+    name: "Xbox Wireless Controller",
+    category: "Gaming",
+    subCategory: "Controllers",
+    collection: "Gaming Essentials",
+    image:
+      "https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=900&q=80",
+    price: 21999,
+    originalPrice: 24999,
+    sizes: ["Standard"],
+    colors: ["Carbon Black", "Robot White"],
+    color: "Carbon Black",
+    stock: 20,
+    rating: 4.7,
+    reviews: 184,
+    badge: "Popular",
+    description:
+      "A comfortable wireless gaming controller for Xbox and compatible PC gaming setups.",
+  },
+
+  {
+    id: 34,
+    slug: "razer-blackwidow-v4",
+    name: "Razer BlackWidow V4 Keyboard",
+    category: "Gaming",
+    subCategory: "Keyboards",
+    collection: "PC Gaming",
+    image:
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=900&q=80",
+    price: 39999,
+    originalPrice: 44999,
+    sizes: ["Full Size"],
+    colors: ["Black"],
+    color: "Black",
+    stock: 13,
+    rating: 4.8,
+    reviews: 151,
+    badge: "Top Rated",
+    description:
+      "A mechanical RGB gaming keyboard built for responsive controls, customization and long gaming sessions.",
+  },
+
+  {
+    id: 35,
+    slug: "hyperx-cloud-iii",
+    name: "HyperX Cloud III Gaming Headset",
+    category: "Gaming",
+    subCategory: "Headsets",
+    collection: "PC Gaming",
+    image:
+      "https://images.unsplash.com/photo-1599669454699-248893623440?auto=format&fit=crop&w=900&q=80",
+    price: 28999,
+    originalPrice: 32999,
+    sizes: ["Standard"],
+    colors: ["Black", "Red"],
+    color: "Black",
+    stock: 17,
+    rating: 4.7,
+    reviews: 203,
+    badge: "Best Seller",
+    description:
+      "A comfortable gaming headset with clear audio and microphone support for competitive and casual play.",
+  },
+
+  {
+    id: 36,
+    slug: "logitech-g502-x",
+    name: "Logitech G502 X Gaming Mouse",
+    category: "Gaming",
+    subCategory: "Mice",
+    collection: "PC Gaming",
+    image:
+      "https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=900&q=80",
+    price: 23999,
+    originalPrice: 26999,
+    sizes: ["Standard"],
+    colors: ["Black", "White"],
+    color: "Black",
+    stock: 19,
+    rating: 4.8,
+    reviews: 221,
+    badge: "Top Rated",
+    description:
+      "A responsive gaming mouse with programmable controls and precise tracking for competitive PC gaming.",
+  },
+
+  {
+    id: 37,
+    slug: "adjustable-dumbbell-set",
+    name: "Adjustable Dumbbell Set",
+    category: "Sports & Fitness",
+    subCategory: "Strength Training",
+    collection: "Home Gym",
+    image:
+      "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=900&q=80",
+    price: 29999,
+    originalPrice: 34999,
+    sizes: ["20kg Set"],
+    colors: ["Black"],
+    color: "Black",
+    stock: 12,
+    rating: 4.7,
+    reviews: 134,
+    badge: "Home Gym",
+    description:
+      "A space-saving adjustable dumbbell set for strength workouts, home fitness and progressive training.",
+  },
+
+  {
+    id: 38,
+    slug: "premium-yoga-mat",
+    name: "Premium Non-Slip Yoga Mat",
+    category: "Sports & Fitness",
+    subCategory: "Yoga",
+    collection: "Mind & Body",
+    image:
+      "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=900&q=80",
+    price: 5499,
+    originalPrice: 6499,
+    sizes: ["6mm"],
+    colors: ["Purple", "Black", "Blue"],
+    color: "Purple",
+    stock: 32,
+    rating: 4.6,
+    reviews: 181,
+    badge: "Popular",
+    description:
+      "A cushioned non-slip yoga mat for stretching, yoga, Pilates and everyday home workouts.",
+  },
+
+  {
+    id: 39,
+    slug: "nike-running-shoes",
+    name: "Nike Air Zoom Running Shoes",
+    category: "Sports & Fitness",
+    subCategory: "Running",
+    collection: "Running Gear",
+    image:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80",
+    price: 28999,
+    originalPrice: 32999,
+    sizes: ["40", "41", "42", "43", "44"],
+    colors: ["Black", "White"],
+    color: "Black",
+    stock: 16,
+    rating: 4.8,
+    reviews: 248,
+    badge: "Best Seller",
+    description:
+      "Lightweight running shoes designed for comfortable daily training, walking and road running.",
+  },
+
+  {
+    id: 40,
+    slug: "insulated-sports-bottle",
+    name: "Insulated Sports Water Bottle",
+    category: "Sports & Fitness",
+    subCategory: "Accessories",
+    collection: "Training Essentials",
+    image:
+      "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=80",
+    price: 3999,
+    originalPrice: 4699,
+    sizes: ["750ml"],
+    colors: ["Black", "Blue", "Silver"],
+    color: "Black",
+    stock: 38,
+    rating: 4.5,
+    reviews: 127,
+    badge: "Value Pick",
+    description:
+      "A reusable insulated bottle that keeps drinks cool and supports gym, work and outdoor routines.",
+  },
+
+  {
+    id: 41,
+    slug: "resistance-band-set",
+    name: "Resistance Band Training Set",
+    category: "Sports & Fitness",
+    subCategory: "Training",
+    collection: "Home Gym",
+    image:
+      "https://images.unsplash.com/photo-1598289431512-b97b0917affc?auto=format&fit=crop&w=900&q=80",
+    price: 6499,
+    originalPrice: 7499,
+    sizes: ["5 Band Set"],
+    colors: ["Multi"],
+    color: "Multi",
+    stock: 27,
+    rating: 4.6,
+    reviews: 149,
+    badge: "Starter Pick",
+    description:
+      "A versatile resistance band set for mobility, strength training and compact at-home workouts.",
+  },
+    {
+    id: 42,
+    slug: "atomic-habits",
+    name: "Atomic Habits",
+    category: "Books",
+    subCategory: "Personal Development",
+    collection: "Best Sellers",
+    image:
+      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=900&q=80",
+    price: 2499,
+    originalPrice: 2999,
+    sizes: ["Paperback"],
+    colors: ["White"],
+    color: "White",
+    stock: 35,
+    rating: 4.9,
+    reviews: 508,
+    badge: "Best Seller",
+    description:
+      "A practical personal-development book focused on building better habits through small, consistent improvements.",
+  },
+
+  {
+    id: 43,
+    slug: "psychology-of-money",
+    name: "The Psychology of Money",
+    category: "Books",
+    subCategory: "Business & Finance",
+    collection: "Business Reads",
+    image:
+      "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=900&q=80",
+    price: 2299,
+    originalPrice: 2799,
+    sizes: ["Paperback"],
+    colors: ["White"],
+    color: "White",
+    stock: 28,
+    rating: 4.8,
+    reviews: 341,
+    badge: "Popular",
+    description:
+      "An accessible book about behavior, decision-making and the way people think about money and wealth.",
+  },
+
+  {
+    id: 44,
+    slug: "clean-code",
+    name: "Clean Code",
+    category: "Books",
+    subCategory: "Technology",
+    collection: "Developer Books",
+    image:
+      "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80",
+    price: 5499,
+    originalPrice: 5999,
+    sizes: ["Paperback"],
+    colors: ["White"],
+    color: "White",
+    stock: 17,
+    rating: 4.8,
+    reviews: 176,
+    badge: "Developer Pick",
+    description:
+      "A software engineering book focused on writing readable, maintainable and professional-quality code.",
+  },
+
+  {
+    id: 45,
+    slug: "deep-work",
+    name: "Deep Work",
+    category: "Books",
+    subCategory: "Productivity",
+    collection: "Productivity Reads",
+    image:
+      "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=900&q=80",
+    price: 2399,
+    originalPrice: 2899,
+    sizes: ["Paperback"],
+    colors: ["White"],
+    color: "White",
+    stock: 23,
+    rating: 4.7,
+    reviews: 214,
+    badge: "Recommended",
+    description:
+      "A productivity book about focused work, reducing distraction and improving high-value professional output.",
+  },
+
+  {
+    id: 46,
+    slug: "zero-to-one",
+    name: "Zero to One",
+    category: "Books",
+    subCategory: "Business & Startups",
+    collection: "Startup Reads",
+    image:
+      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=900&q=80",
+    price: 2199,
+    originalPrice: 2699,
+    sizes: ["Paperback"],
+    colors: ["White"],
+    color: "White",
+    stock: 21,
+    rating: 4.6,
+    reviews: 158,
+    badge: "Founder Pick",
+    description:
+      "A concise startup and business book exploring innovation, differentiation and building valuable companies.",
+  },
+
+  {
+    id: 47,
+    slug: "urban-laptop-backpack",
+    name: "Urban Laptop Backpack",
+    category: "Accessories",
+    subCategory: "Bags",
+    collection: "Everyday Carry",
+    image:
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=80",
+    price: 8999,
+    originalPrice: 10499,
+    sizes: ["15.6 inch"],
+    colors: ["Black", "Navy"],
+    color: "Black",
+    stock: 25,
+    rating: 4.7,
+    reviews: 194,
+    badge: "Popular",
+    description:
+      "A practical laptop backpack with organized storage for commuting, university, travel and daily work.",
+  },
+
+  {
+    id: 48,
+    slug: "leather-wallet",
+    name: "Genuine Leather Wallet",
+    category: "Accessories",
+    subCategory: "Wallets",
+    collection: "Everyday Essentials",
+    image:
+      "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
+    price: 4999,
+    originalPrice: 5999,
+    sizes: ["Standard"],
+    colors: ["Brown", "Black"],
+    color: "Brown",
+    stock: 30,
+    rating: 4.6,
+    reviews: 143,
+    badge: "Gift Pick",
+    description:
+      "A compact genuine leather wallet with practical card storage and a classic everyday design.",
+  },
+
+  {
+    id: 49,
+    slug: "usb-c-gan-charger",
+    name: "65W USB-C GaN Fast Charger",
+    category: "Accessories",
+    subCategory: "Chargers",
+    collection: "Tech Accessories",
+    image:
+      "https://images.unsplash.com/photo-1615526675159-e248c3021d3f?auto=format&fit=crop&w=900&q=80",
+    price: 7999,
+    originalPrice: 8999,
+    sizes: ["65W"],
+    colors: ["White", "Black"],
+    color: "White",
+    stock: 34,
+    rating: 4.7,
+    reviews: 264,
+    badge: "Best Seller",
+    description:
+      "A compact high-speed USB-C GaN charger for compatible phones, tablets and laptops.",
+  },
+
+  {
+    id: 50,
+    slug: "braided-usb-c-cable",
+    name: "Braided USB-C Fast Charging Cable",
+    category: "Accessories",
+    subCategory: "Cables",
+    collection: "Tech Accessories",
+    image:
+      "https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=900&q=80",
+    price: 2499,
+    originalPrice: 2999,
+    sizes: ["1m", "2m"],
+    colors: ["Black"],
+    color: "Black",
+    stock: 50,
+    rating: 4.5,
+    reviews: 301,
+    badge: "Value Pick",
+    description:
+      "A durable braided USB-C cable for fast charging and reliable everyday data connectivity.",
+  },
+
+  {
+    id: 51,
+    slug: "polarized-sunglasses",
+    name: "Classic Polarized Sunglasses",
+    category: "Accessories",
+    subCategory: "Eyewear",
+    collection: "Style Essentials",
+    image:
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=80",
+    price: 6499,
+    originalPrice: 7499,
+    sizes: ["Standard"],
+    colors: ["Black", "Tortoise"],
+    color: "Black",
+    stock: 22,
+    rating: 4.6,
+    reviews: 116,
+    badge: "Summer Pick",
+    description:
+      "Classic polarized sunglasses designed for everyday style, glare reduction and outdoor comfort.",
+  },
+
+  {
+    id: 52,
+    slug: "minimalist-travel-organizer",
+    name: "Minimalist Travel Organizer",
+    category: "Accessories",
+    subCategory: "Travel",
+    collection: "Travel Essentials",
+    image:
+      "https://images.unsplash.com/photo-1553531384-cc64ac80f931?auto=format&fit=crop&w=900&q=80",
+    price: 5499,
+    originalPrice: 6499,
+    sizes: ["Standard"],
+    colors: ["Gray", "Black"],
+    color: "Gray",
+    stock: 19,
+    rating: 4.5,
+    reviews: 88,
+    badge: "New",
+    description:
+      "A compact travel organizer for cables, chargers, documents and small everyday essentials.",
   },
 ];
