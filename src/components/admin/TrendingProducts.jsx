@@ -1,523 +1,403 @@
 import {
-  Flame,
-  TrendingUp,
   Package,
-  Sparkles,
+  TrendingUp,
+  ArrowUpRight,
 } from "lucide-react";
 
 
 function TrendingProducts({
-
   products = [],
-
 }) {
 
+  const topProducts =
+    products.slice(0, 5);
 
 
   return (
 
     <div
       className="
-        rounded-3xl
-        bg-white
-        p-6
+        h-full
+        rounded-[24px]
         border
-        border-slate-200
-        shadow-sm
+        border-[#dfe5df]
+        bg-white
+        p-5
+        shadow-[0_16px_45px_rgba(16,37,29,0.06)]
+        md:p-6
       "
     >
-
-
-
-      {/* Header */}
-
 
       <div
         className="
           flex
-          items-center
+          items-start
           justify-between
+          gap-4
         "
       >
 
-
-        <div>
-
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+          "
+        >
 
           <div
             className="
               flex
+              h-10
+              w-10
               items-center
-              gap-3
+              justify-center
+              rounded-xl
+              bg-[#e7f0e9]
+              text-[#176247]
             "
           >
+            <TrendingUp size={18} />
+          </div>
 
-            <div
+
+          <div>
+
+            <p
               className="
-                rounded-xl
-                bg-orange-100
-                p-3
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-[0.16em]
+                text-emerald-700
               "
             >
-
-              <Flame
-                className="
-                  text-orange-600
-                "
-              />
-
-            </div>
-
+              Product Performance
+            </p>
 
 
             <h2
               className="
+                mt-0.5
                 text-xl
-                font-bold
-                text-slate-900
+                font-black
+                tracking-tight
+                text-[#17231d]
               "
             >
-              Product Intelligence
+              Trending Products
             </h2>
 
-
           </div>
-
-
-
-          <p
-            className="
-              mt-2
-              text-sm
-              text-slate-500
-            "
-          >
-            AI-ranked products based on sales performance.
-          </p>
-
 
         </div>
 
 
+        <span
+          className="
+            rounded-full
+            bg-[#eef4ef]
+            px-3
+            py-1.5
+            text-[10px]
+            font-bold
+            text-[#176247]
+          "
+        >
+          Top {topProducts.length}
+        </span>
+
       </div>
 
 
-
-
-
+      <p
+        className="
+          mt-3
+          text-xs
+          leading-5
+          text-slate-500
+        "
+      >
+        Products generating the strongest sales activity.
+      </p>
 
 
       <div
         className="
-          mt-6
-          space-y-5
+          mt-5
+          space-y-3
         "
       >
 
+        {topProducts.length === 0 ? (
 
+          <div
+            className="
+              flex
+              min-h-[280px]
+              flex-col
+              items-center
+              justify-center
+              rounded-2xl
+              border
+              border-dashed
+              border-[#dce2dc]
+              bg-[#f8faf8]
+              text-center
+            "
+          >
 
-        {
-          products.length > 0 ? (
+            <Package
+              size={28}
+              className="
+                text-slate-300
+              "
+            />
 
-            products.map((product, index) => (
+            <p
+              className="
+                mt-3
+                text-sm
+                font-semibold
+                text-slate-400
+              "
+            >
+              No product data available
+            </p>
 
+          </div>
+
+        ) : (
+
+          topProducts.map(
+            (product, index) => (
 
               <div
-
                 key={
                   product.productId ||
-                  product._id ||
-                  index
+                  product.id ||
+                  product.name
                 }
-
                 className="
                   group
                   rounded-2xl
                   border
-                  border-slate-200
-                  p-5
-                  transition-all
-                  hover:-translate-y-1
-                  hover:shadow-lg
+                  border-[#e4e8e4]
+                  bg-[#fafbfa]
+                  p-4
+                  transition
+                  hover:border-emerald-700/20
+                  hover:bg-white
+                  hover:shadow-[0_10px_28px_rgba(16,37,29,0.06)]
                 "
-
               >
-
-
 
                 <div
                   className="
                     flex
                     items-start
-                    justify-between
-                    gap-4
+                    gap-3
                   "
                 >
-
-
 
                   <div
                     className="
                       flex
-                      gap-4
+                      h-9
+                      w-9
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-xl
+                      bg-[#163a2c]
+                      text-xs
+                      font-black
+                      text-white
                     "
                   >
+                    {index + 1}
+                  </div>
 
 
+                  <div
+                    className="
+                      min-w-0
+                      flex-1
+                    "
+                  >
 
                     <div
                       className="
                         flex
-                        h-12
-                        w-12
-                        items-center
-                        justify-center
-                        rounded-xl
-                        bg-slate-100
-                        font-bold
-                        text-slate-700
+                        items-start
+                        justify-between
+                        gap-3
                       "
                     >
 
-                      #{index + 1}
-
-                    </div>
-
-
-
-
-
-                    <div>
-
-
-                      <h3
+                      <div
                         className="
-                          font-bold
-                          text-slate-900
+                          min-w-0
                         "
                       >
 
-                        {
-                          product.name ||
-                          product.productId
-                        }
+                        <h3
+                          className="
+                            truncate
+                            text-sm
+                            font-black
+                            text-[#17231d]
+                          "
+                        >
+                          {
+                            product.name ||
+                            product.productName ||
+                            "Unnamed Product"
+                          }
+                        </h3>
 
-                      </h3>
+
+                        <p
+                          className="
+                            mt-1
+                            text-[10px]
+                            font-semibold
+                            uppercase
+                            tracking-[0.12em]
+                            text-slate-400
+                          "
+                        >
+                          {
+                            product.category ||
+                            "General"
+                          }
+                        </p>
+
+                      </div>
 
 
-
-                      <p
+                      <ArrowUpRight
+                        size={15}
                         className="
-                          mt-1
-                          text-sm
-                          text-slate-500
+                          shrink-0
+                          text-[#176247]
+                          transition
+                          group-hover:translate-x-0.5
+                          group-hover:-translate-y-0.5
                         "
-                      >
-
-                        {
-                          product.category ||
-                          "Product"
-                        }
-
-                      </p>
-
+                      />
 
                     </div>
 
-
-                  </div>
-
-
-
-
-
-                  <TrendingUp
-                    className="
-                      text-green-500
-                    "
-                  />
-
-
-                </div>
-
-
-
-
-
-
-
-
-                {/* Metrics */}
-
-
-                <div
-                  className="
-                    mt-5
-                    grid
-                    gap-4
-                    md:grid-cols-2
-                  "
-                >
-
-
-
-                  <div
-                    className="
-                      rounded-xl
-                      bg-slate-50
-                      p-4
-                    "
-                  >
-
-                    <p
-                      className="
-                        text-xs
-                        text-slate-500
-                      "
-                    >
-                      Units Sold
-                    </p>
-
-
-                    <p
-                      className="
-                        mt-1
-                        text-xl
-                        font-bold
-                      "
-                    >
-
-                      {
-                        product.unitsSold || 0
-                      }
-
-                    </p>
-
-
-                  </div>
-
-
-
-
-
-                  <div
-                    className="
-                      rounded-xl
-                      bg-slate-50
-                      p-4
-                    "
-                  >
-
-                    <p
-                      className="
-                        text-xs
-                        text-slate-500
-                      "
-                    >
-                      Revenue
-                    </p>
-
-
-                    <p
-                      className="
-                        mt-1
-                        text-xl
-                        font-bold
-                      "
-                    >
-
-                      $
-                      {
-                        product.revenue
-                        ?
-                        product.revenue.toLocaleString()
-                        :
-                        0
-                      }
-
-                    </p>
-
-
-                  </div>
-
-
-
-                </div>
-
-
-
-
-
-
-
-                {/* Momentum */}
-
-
-                <div
-                  className="
-                    mt-5
-                  "
-                >
-
-
-                  <div
-                    className="
-                      flex
-                      justify-between
-                      text-sm
-                    "
-                  >
-
-                    <span
-                      className="
-                        text-slate-500
-                      "
-                    >
-                      Sales Momentum
-                    </span>
-
-
-                    <span
-                      className="
-                        font-semibold
-                        text-green-600
-                      "
-                    >
-                      {
-                        Math.min(
-                          95,
-                          (product.unitsSold || 0) * 10
-                        )
-                      }%
-
-                    </span>
-
-
-                  </div>
-
-
-
-                  <div
-                    className="
-                      mt-2
-                      h-2
-                      overflow-hidden
-                      rounded-full
-                      bg-slate-100
-                    "
-                  >
 
                     <div
                       className="
-                        h-full
-                        rounded-full
-                        bg-green-500
+                        mt-4
+                        grid
+                        grid-cols-2
+                        gap-3
                       "
-                      style={{
-                        width:
-                          `${Math.min(
-                            95,
-                            (product.unitsSold || 0) * 10
-                          )}%`
-                      }}
-                    />
+                    >
+
+                      <div
+                        className="
+                          rounded-xl
+                          bg-[#f0f5f1]
+                          px-3
+                          py-2
+                        "
+                      >
+
+                        <p
+                          className="
+                            text-[9px]
+                            font-bold
+                            uppercase
+                            tracking-[0.1em]
+                            text-slate-400
+                          "
+                        >
+                          Units Sold
+                        </p>
+
+
+                        <strong
+                          className="
+                            mt-1
+                            block
+                            text-sm
+                            font-black
+                            text-[#17231d]
+                          "
+                        >
+                          {
+                            product.unitsSold ??
+                            product.orderCount ??
+                            product.totalSold ??
+                            0
+                          }
+                        </strong>
+
+                      </div>
+
+
+                      <div
+                        className="
+                          rounded-xl
+                          bg-[#f0f5f1]
+                          px-3
+                          py-2
+                        "
+                      >
+
+                        <p
+                          className="
+                            text-[9px]
+                            font-bold
+                            uppercase
+                            tracking-[0.1em]
+                            text-slate-400
+                          "
+                        >
+                          Revenue
+                        </p>
+
+
+                        <strong
+                          className="
+                            mt-1
+                            block
+                            text-sm
+                            font-black
+                            text-[#17231d]
+                          "
+                        >
+                          $
+                          {
+                            Number(
+                              product.revenue || 0
+                            ).toLocaleString()
+                          }
+                        </strong>
+
+                      </div>
+
+                    </div>
 
                   </div>
 
-
                 </div>
-
-
-
-
-
-
-
-
-                {/* AI Insight */}
-
-
-                <div
-                  className="
-                    mt-5
-                    flex
-                    gap-3
-                    rounded-xl
-                    bg-indigo-50
-                    p-4
-                  "
-                >
-
-
-                  <Sparkles
-                    size={18}
-                    className="
-                      mt-1
-                      text-indigo-600
-                    "
-                  />
-
-
-
-                  <p
-                    className="
-                      text-sm
-                      text-indigo-900
-                    "
-                  >
-
-                    {
-                      product.unitsSold > 10
-
-                      ?
-
-                      "High demand product. Consider increasing availability."
-
-                      :
-
-                      "Product is performing steadily. Continue monitoring sales."
-
-                    }
-
-                  </p>
-
-
-                </div>
-
-
-
 
               </div>
 
-
-            ))
-
-          ) : (
-
-
-            <div
-              className="
-                py-10
-                text-center
-                text-slate-400
-              "
-            >
-              No trending products available.
-            </div>
-
-
+            )
           )
 
-        }
-
-
+        )}
 
       </div>
 
-
-
     </div>
-
 
   );
 

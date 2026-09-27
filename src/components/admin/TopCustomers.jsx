@@ -1,444 +1,446 @@
 import {
   Users,
   Crown,
-  Sparkles,
-  TrendingUp,
+  ShoppingBag,
+  ArrowUpRight,
 } from "lucide-react";
 
 
 function TopCustomers({
-
   customers = [],
-
+  onSelectCustomer,
 }) {
 
+  const topCustomers =
+    customers.slice(0, 5);
 
 
   return (
 
     <div
       className="
-        rounded-3xl
-        bg-white
-        p-6
+        h-full
+        rounded-[24px]
         border
-        border-slate-200
-        shadow-sm
+        border-[#dfe5df]
+        bg-white
+        p-5
+        shadow-[0_16px_45px_rgba(16,37,29,0.06)]
+        md:p-6
       "
     >
-
-
-
-      {/* Header */}
 
       <div
         className="
           flex
-          items-center
-          gap-3
+          items-start
+          justify-between
+          gap-4
         "
       >
 
-
         <div
           className="
-            rounded-xl
-            bg-purple-100
-            p-3
+            flex
+            items-center
+            gap-3
           "
         >
 
-          <Users
+          <div
             className="
-              text-purple-600
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-xl
+              bg-[#e7f0e9]
+              text-[#176247]
             "
-          />
+          >
+            <Users size={18} />
+          </div>
+
+
+          <div>
+
+            <p
+              className="
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-[0.16em]
+                text-emerald-700
+              "
+            >
+              Customer Intelligence
+            </p>
+
+
+            <h2
+              className="
+                mt-0.5
+                text-xl
+                font-black
+                tracking-tight
+                text-[#17231d]
+              "
+            >
+              Top Customers
+            </h2>
+
+          </div>
 
         </div>
 
 
-
-
-        <div>
-
-          <h2
-            className="
-              text-xl
-              font-bold
-              text-slate-900
-            "
-          >
-            Customer Intelligence
-          </h2>
-
-
-          <p
-            className="
-              text-sm
-              text-slate-500
-            "
-          >
-            AI-ranked customers based on value and activity.
-          </p>
-
-
-        </div>
-
+        <span
+          className="
+            rounded-full
+            bg-[#eef4ef]
+            px-3
+            py-1.5
+            text-[10px]
+            font-bold
+            text-[#176247]
+          "
+        >
+          Top {topCustomers.length}
+        </span>
 
       </div>
 
 
-
-
-
+      <p
+        className="
+          mt-3
+          text-xs
+          leading-5
+          text-slate-500
+        "
+      >
+        Highest-value customers based on real order spending.
+      </p>
 
 
       <div
         className="
-          mt-6
-          space-y-5
+          mt-5
+          space-y-3
         "
       >
 
+        {topCustomers.length === 0 ? (
 
-        {
-          customers.length > 0 ? (
+          <div
+            className="
+              flex
+              min-h-[260px]
+              flex-col
+              items-center
+              justify-center
+              rounded-2xl
+              border
+              border-dashed
+              border-[#dce2dc]
+              bg-[#f8faf8]
+              text-center
+            "
+          >
 
-            customers.map((customer,index)=>(
+            <Users
+              size={28}
+              className="
+                text-slate-300
+              "
+            />
+
+            <p
+              className="
+                mt-3
+                text-sm
+                font-semibold
+                text-slate-400
+              "
+            >
+              No customer data available
+            </p>
+
+          </div>
+
+        ) : (
+
+          topCustomers.map(
+            (customer, index) => {
+
+              const spending =
+                Number(
+                  customer.totalSpent ||
+                  customer.totalSpending ||
+                  customer.revenue ||
+                  0
+                );
+
+              const orderCount =
+                Number(
+                  customer.totalOrders ||
+                  customer.orderCount ||
+                  customer.orders ||
+                  0
+                );
 
 
-              <div
+              return (
 
-                key={
-                  customer._id ||
-                  index
-                }
+                <button
+                  type="button"
 
-                className="
-                  rounded-2xl
-                  border
-                  border-slate-200
-                  p-5
-                  transition
-                  hover:-translate-y-1
-                  hover:shadow-lg
-                "
+                  key={
+                    customer.id ||
+                    customer._id ||
+                    customer.email ||
+                    customer.name
+                  }
 
-              >
+                  onClick={() =>
+                    onSelectCustomer?.(
+                      customer
+                    )
+                  }
 
-
-
-                <div
                   className="
-                    flex
-                    items-start
-                    justify-between
+                    group
+                    w-full
+                    rounded-2xl
+                    border
+                    border-[#e4e8e4]
+                    bg-[#fafbfa]
+                    p-4
+                    text-left
+                    transition
+                    hover:-translate-y-0.5
+                    hover:border-emerald-700/20
+                    hover:bg-white
+                    hover:shadow-[0_10px_28px_rgba(16,37,29,0.06)]
                   "
                 >
-
-
 
                   <div
                     className="
                       flex
-                      gap-4
+                      items-center
+                      gap-3
                     "
                   >
 
-
                     <div
-                      className="
+                      className={`
                         flex
-                        h-12
-                        w-12
+                        h-10
+                        w-10
+                        shrink-0
                         items-center
                         justify-center
-                        rounded-full
-                        bg-purple-100
-                        font-bold
-                        text-purple-700
-                      "
+                        rounded-xl
+                        font-black
+                        ${
+                          index === 0
+                            ? "bg-[#163a2c] text-white"
+                            : "bg-[#e7f0e9] text-[#176247]"
+                        }
+                      `}
                     >
 
                       {
                         index === 0
-                        ?
-                        "🥇"
-                        :
-                        `#${index+1}`
+                          ? (
+                            <Crown
+                              size={17}
+                            />
+                          )
+                          : index + 1
                       }
 
                     </div>
 
 
-
-
-
-                    <div>
-
-
-                      <h3
-                        className="
-                          font-bold
-                          text-slate-900
-                        "
-                      >
-
-                        {
-                          customer.name ||
-                          "Customer"
-                        }
-
-                      </h3>
-
-
-                      <p
-                        className="
-                          text-sm
-                          text-slate-500
-                        "
-                      >
-
-                        {
-                          customer.email ||
-                          "Customer account"
-                        }
-
-                      </p>
-
-
-                    </div>
-
-
-                  </div>
-
-
-
-
-
-
-                  {
-                    index === 0 && (
+                    <div
+                      className="
+                        min-w-0
+                        flex-1
+                      "
+                    >
 
                       <div
                         className="
                           flex
-                          items-center
-                          gap-1
-                          rounded-full
-                          bg-yellow-100
-                          px-3
-                          py-1
-                          text-xs
-                          font-semibold
-                          text-yellow-700
+                          items-start
+                          justify-between
+                          gap-3
                         "
                       >
 
-                        <Crown size={14}/>
+                        <div
+                          className="
+                            min-w-0
+                          "
+                        >
 
-                        VIP
+                          <h3
+                            className="
+                              truncate
+                              text-sm
+                              font-black
+                              text-[#17231d]
+                            "
+                          >
+                            {
+                              customer.name ||
+                              "Unknown Customer"
+                            }
+                          </h3>
+
+
+                          <p
+                            className="
+                              mt-0.5
+                              truncate
+                              text-[10px]
+                              text-slate-400
+                            "
+                          >
+                            {
+                              customer.email ||
+                              "No email available"
+                            }
+                          </p>
+
+                        </div>
+
+
+                        <ArrowUpRight
+                          size={15}
+                          className="
+                            shrink-0
+                            text-[#176247]
+                            transition
+                            group-hover:translate-x-0.5
+                            group-hover:-translate-y-0.5
+                          "
+                        />
 
                       </div>
 
-                    )
-                  }
 
-
-
-
-                </div>
-
-
-
-
-
-
-
-
-                <div
-                  className="
-                    mt-5
-                    grid
-                    gap-4
-                    md:grid-cols-2
-                  "
-                >
-
-
-                  <div
-                    className="
-                      rounded-xl
-                      bg-slate-50
-                      p-4
-                    "
-                  >
-
-                    <p
-                      className="
-                        text-xs
-                        text-slate-500
-                      "
-                    >
-                      Lifetime Value
-                    </p>
-
-
-                    <p
-                      className="
-                        mt-1
-                        text-xl
-                        font-bold
-                      "
-                    >
-
-                      $
-                      {
-                        customer.totalSpent
-                        ?
-                        customer.totalSpent.toLocaleString()
-                        :
-                        0
-                      }
-
-                    </p>
-
-
-                  </div>
-
-
-
-
-
-                  <div
-                    className="
-                      rounded-xl
-                      bg-slate-50
-                      p-4
-                    "
-                  >
-
-                    <p
-                      className="
-                        text-xs
-                        text-slate-500
-                      "
-                    >
-                      Customer Status
-                    </p>
-
-
-                    <p
-                      className="
-                        mt-1
-                        flex
-                        items-center
-                        gap-2
-                        font-bold
-                      "
-                    >
-
-                      <TrendingUp
-                        size={16}
+                      <div
                         className="
-                          text-green-500
+                          mt-3
+                          grid
+                          grid-cols-2
+                          gap-2
                         "
-                      />
+                      >
 
-                      Active
+                        <div
+                          className="
+                            rounded-xl
+                            bg-[#f0f5f1]
+                            px-3
+                            py-2
+                          "
+                        >
 
-                    </p>
+                          <p
+                            className="
+                              text-[8px]
+                              font-bold
+                              uppercase
+                              tracking-[0.1em]
+                              text-slate-400
+                            "
+                          >
+                            Lifetime Value
+                          </p>
 
+
+                          <strong
+                            className="
+                              mt-1
+                              block
+                              text-sm
+                              font-black
+                              text-[#17231d]
+                            "
+                          >
+                            $
+                            {
+                              spending.toLocaleString()
+                            }
+                          </strong>
+
+                        </div>
+
+
+                        <div
+                          className="
+                            rounded-xl
+                            bg-[#f0f5f1]
+                            px-3
+                            py-2
+                          "
+                        >
+
+                          <div
+                            className="
+                              flex
+                              items-center
+                              gap-1
+                              text-[8px]
+                              font-bold
+                              uppercase
+                              tracking-[0.1em]
+                              text-slate-400
+                            "
+                          >
+                            <ShoppingBag
+                              size={10}
+                            />
+
+                            Orders
+                          </div>
+
+
+                          <strong
+                            className="
+                              mt-1
+                              block
+                              text-sm
+                              font-black
+                              text-[#17231d]
+                            "
+                          >
+                            {orderCount}
+                          </strong>
+
+                        </div>
+
+                      </div>
+
+                    </div>
 
                   </div>
 
+                </button>
 
+              );
 
-                </div>
-
-
-
-
-
-
-
-                <div
-                  className="
-                    mt-5
-                    flex
-                    gap-3
-                    rounded-xl
-                    bg-indigo-50
-                    p-4
-                  "
-                >
-
-
-                  <Sparkles
-                    size={18}
-                    className="
-                      text-indigo-600
-                    "
-                  />
-
-
-                  <p
-                    className="
-                      text-sm
-                      text-indigo-900
-                    "
-                  >
-
-                    {
-                      index === 0
-
-                      ?
-
-                      "High-value customer. AI recommends personalized engagement."
-
-                      :
-
-                      "Customer shows healthy purchasing activity."
-
-                    }
-
-                  </p>
-
-
-                </div>
-
-
-
-              </div>
-
-
-            ))
-
-
+            }
           )
 
-          :
-
-          (
-
-            <div
-              className="
-                py-10
-                text-center
-                text-slate-400
-              "
-            >
-              No customer data available.
-            </div>
-
-          )
-
-        }
-
+        )}
 
       </div>
-
-
 
     </div>
 

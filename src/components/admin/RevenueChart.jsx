@@ -1,6 +1,6 @@
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -8,56 +8,314 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import {
+  TrendingUp,
+  BarChart3,
+} from "lucide-react";
+
 
 function RevenueChart({
   data = [],
 }) {
 
+  const totalRevenue =
+    data.reduce(
+      (total, item) =>
+        total +
+        Number(
+          item.revenue || 0
+        ),
+      0
+    );
+
+
+  const bestDay =
+    data.reduce(
+      (best, item) => {
+
+        if (
+          !best ||
+          Number(item.revenue || 0) >
+            Number(best.revenue || 0)
+        ) {
+          return item;
+        }
+
+        return best;
+
+      },
+      null
+    );
+
+
   return (
 
     <div
       className="
+        h-full
         w-full
         overflow-hidden
-        rounded-2xl
-        bg-white
-        p-6
-        shadow-sm
+        rounded-[24px]
         border
-        border-slate-200
+        border-[#dfe5df]
+        bg-white
+        p-5
+        shadow-[0_16px_45px_rgba(16,37,29,0.06)]
+        md:p-6
       "
     >
 
-      <div className="mb-6">
+      {/* ================================================
+          HEADER
+      ================================================= */}
 
-        <h2
+      <div
+        className="
+          flex
+          flex-col
+          gap-4
+          sm:flex-row
+          sm:items-start
+          sm:justify-between
+        "
+      >
+
+        <div>
+
+          <div
+            className="
+              flex
+              items-center
+              gap-3
+            "
+          >
+
+            <div
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                rounded-xl
+                bg-[#e7f0e9]
+                text-[#176247]
+              "
+            >
+              <BarChart3 size={18} />
+            </div>
+
+
+            <div>
+
+              <p
+                className="
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.16em]
+                  text-emerald-700
+                "
+              >
+                Revenue Analytics
+              </p>
+
+
+              <h2
+                className="
+                  mt-0.5
+                  text-xl
+                  font-black
+                  tracking-tight
+                  text-[#17231d]
+                "
+              >
+                Sales Performance
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          <p
+            className="
+              mt-3
+              text-xs
+              leading-5
+              text-slate-500
+            "
+          >
+            Daily revenue performance and sales momentum.
+          </p>
+
+        </div>
+
+
+        <div
           className="
-            text-xl
-            font-semibold
-            text-slate-900
+            rounded-xl
+            bg-[#f3f7f4]
+            px-4
+            py-3
+            text-right
           "
         >
-          Sales Performance
-        </h2>
+
+          <p
+            className="
+              text-[9px]
+              font-bold
+              uppercase
+              tracking-[0.13em]
+              text-slate-400
+            "
+          >
+            Period Revenue
+          </p>
 
 
-        <p
-          className="
-            mt-1
-            text-sm
-            text-slate-500
-          "
-        >
-          Revenue trend over time
-        </p>
+          <strong
+            className="
+              mt-1
+              block
+              text-lg
+              font-black
+              text-[#17231d]
+            "
+          >
+            $
+            {
+              totalRevenue.toLocaleString()
+            }
+          </strong>
+
+        </div>
 
       </div>
 
 
+      {/* ================================================
+          MINI SUMMARY
+      ================================================= */}
+
       <div
         className="
+          mt-5
+          grid
+          gap-3
+          sm:grid-cols-2
+        "
+      >
+
+        <div
+          className="
+            rounded-xl
+            border
+            border-[#e4e8e4]
+            bg-[#fafbfa]
+            px-4
+            py-3
+          "
+        >
+
+          <p
+            className="
+              text-[9px]
+              font-bold
+              uppercase
+              tracking-[0.12em]
+              text-slate-400
+            "
+          >
+            Data Points
+          </p>
+
+          <p
+            className="
+              mt-1
+              text-lg
+              font-black
+              text-[#17231d]
+            "
+          >
+            {data.length}
+          </p>
+
+        </div>
+
+
+        <div
+          className="
+            rounded-xl
+            border
+            border-[#e4e8e4]
+            bg-[#fafbfa]
+            px-4
+            py-3
+          "
+        >
+
+          <p
+            className="
+              text-[9px]
+              font-bold
+              uppercase
+              tracking-[0.12em]
+              text-slate-400
+            "
+          >
+            Best Day
+          </p>
+
+          <div
+            className="
+              mt-1
+              flex
+              items-center
+              gap-2
+            "
+          >
+
+            <TrendingUp
+              size={15}
+              className="
+                text-emerald-700
+              "
+            />
+
+            <strong
+              className="
+                text-sm
+                font-black
+                text-[#17231d]
+              "
+            >
+              {
+                bestDay
+                  ? `$${Number(
+                      bestDay.revenue || 0
+                    ).toLocaleString()}`
+                  : "No data"
+              }
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      {/* ================================================
+          CHART
+      ================================================= */}
+
+      <div
+        className="
+          mt-6
+          h-[320px]
           w-full
-          h-[350px]
         "
       >
 
@@ -69,81 +327,151 @@ function RevenueChart({
               height="100%"
             >
 
-              <LineChart
-                data={data}
+              <AreaChart
+                data={
+                  data
+                }
                 margin={{
                   top: 10,
-                  right: 30,
-                  left: 10,
-                  bottom: 10,
+                  right: 10,
+                  left: 0,
+                  bottom: 0,
                 }}
               >
 
+                <defs>
+
+                  <linearGradient
+                    id="revenueGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+
+                    <stop
+                      offset="5%"
+                      stopColor="#176247"
+                      stopOpacity={0.22}
+                    />
+
+                    <stop
+                      offset="95%"
+                      stopColor="#176247"
+                      stopOpacity={0}
+                    />
+
+                  </linearGradient>
+
+                </defs>
+
+
                 <CartesianGrid
-                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="#e9ede9"
+                  strokeDasharray="4 4"
                 />
 
 
                 <XAxis
                   dataKey="_id"
+                  axisLine={false}
+                  tickLine={false}
                   tick={{
-                    fontSize: 12,
+                    fontSize: 10,
+                    fill: "#7d8a82",
                   }}
                 />
 
 
                 <YAxis
+                  axisLine={false}
+                  tickLine={false}
                   tick={{
-                    fontSize: 12,
+                    fontSize: 10,
+                    fill: "#7d8a82",
+                  }}
+                  width={55}
+                />
+
+
+                <Tooltip
+                  contentStyle={{
+                    borderRadius:
+                      "12px",
+
+                    border:
+                      "1px solid #dfe5df",
+
+                    boxShadow:
+                      "0 14px 35px rgba(16,37,29,0.12)",
+
+                    fontSize:
+                      "12px",
                   }}
                 />
 
 
-                <Tooltip />
-
-
-                <Line
-
+                <Area
                   type="monotone"
-
                   dataKey="revenue"
-
+                  stroke="#176247"
                   strokeWidth={3}
-
-                  dot={true}
-
+                  fill="url(#revenueGradient)"
+                  activeDot={{
+                    r: 5,
+                    fill: "#176247",
+                    stroke: "#ffffff",
+                    strokeWidth: 2,
+                  }}
                 />
 
-
-              </LineChart>
-
+              </AreaChart>
 
             </ResponsiveContainer>
 
-
           ) : (
-
 
             <div
               className="
                 flex
                 h-full
+                flex-col
                 items-center
                 justify-center
-                text-slate-400
+                rounded-2xl
+                border
+                border-dashed
+                border-[#dce2dc]
+                bg-[#f8faf8]
+                text-center
               "
             >
-              No sales data available
+
+              <BarChart3
+                size={26}
+                className="
+                  text-slate-300
+                "
+              />
+
+              <p
+                className="
+                  mt-3
+                  text-sm
+                  font-semibold
+                  text-slate-400
+                "
+              >
+                No sales data available
+              </p>
+
             </div>
 
-
           )
-
         }
 
-
       </div>
-
 
     </div>
 

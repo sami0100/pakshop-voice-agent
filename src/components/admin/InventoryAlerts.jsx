@@ -1,475 +1,518 @@
 import {
   AlertTriangle,
-  Package,
-  Sparkles,
-  TrendingDown,
+  PackageSearch,
+  Warehouse,
+  ArrowUpRight,
 } from "lucide-react";
 
 
 function InventoryAlerts({
-
   items = [],
-
 }) {
 
-
-
-  const getRisk = (item) => {
-
-
-    const stock = item.stock || 0;
-
-    const threshold =
-      item.lowStockThreshold || 10;
-
-
-
-    if (stock <= threshold / 2) {
-
-      return {
-        label: "High Risk",
-        color:
-          "bg-red-100 text-red-700",
-      };
-
-    }
-
-
-    return {
-
-      label: "Medium Risk",
-
-      color:
-        "bg-yellow-100 text-yellow-700",
-
-    };
-
-
-  };
-
-
-
-
+  const sortedItems = [
+    ...items,
+  ].sort(
+    (a, b) =>
+      Number(a.stock || 0) -
+      Number(b.stock || 0)
+  );
 
 
   return (
 
     <div
       className="
-        rounded-3xl
-        bg-white
-        p-6
+        h-full
+        rounded-[24px]
         border
-        border-slate-200
-        shadow-sm
+        border-[#dfe5df]
+        bg-white
+        p-5
+        shadow-[0_16px_45px_rgba(16,37,29,0.06)]
+        md:p-6
       "
     >
 
-
-
-
-      {/* Header */}
-
+      {/* ================================================
+          HEADER
+      ================================================= */}
 
       <div
         className="
           flex
-          items-center
-          gap-3
+          flex-col
+          gap-4
+          sm:flex-row
+          sm:items-start
+          sm:justify-between
         "
       >
 
         <div
           className="
-            rounded-xl
-            bg-red-100
-            p-3
+            flex
+            items-center
+            gap-3
           "
         >
 
-          <AlertTriangle
+          <div
             className="
-              text-red-600
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-xl
+              bg-amber-100
+              text-amber-700
             "
-          />
+          >
+            <AlertTriangle size={18} />
+          </div>
+
+
+          <div>
+
+            <p
+              className="
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-[0.16em]
+                text-amber-700
+              "
+            >
+              Inventory Risk
+            </p>
+
+
+            <h2
+              className="
+                mt-0.5
+                text-xl
+                font-black
+                tracking-tight
+                text-[#17231d]
+              "
+            >
+              Low Stock Alerts
+            </h2>
+
+          </div>
 
         </div>
 
 
-
-
-        <div>
-
-
-          <h2
-            className="
-              text-xl
-              font-bold
-              text-slate-900
-            "
-          >
-            Inventory Intelligence
-          </h2>
-
-
-          <p
-            className="
-              text-sm
-              text-slate-500
-            "
-          >
-            AI monitored stock risks and recommendations.
-          </p>
-
-
-        </div>
-
+        <span
+          className="
+            rounded-full
+            bg-amber-50
+            px-3
+            py-1.5
+            text-[10px]
+            font-bold
+            text-amber-700
+          "
+        >
+          {items.length}
+          {" "}
+          flagged
+        </span>
 
       </div>
 
 
+      <p
+        className="
+          mt-3
+          text-xs
+          leading-5
+          text-slate-500
+        "
+      >
+        Products currently below or near their configured stock threshold.
+      </p>
 
 
-
-
+      {/* ================================================
+          ITEMS
+      ================================================= */}
 
       <div
         className="
-          mt-6
-          space-y-5
+          mt-5
+          space-y-3
         "
       >
 
+        {sortedItems.length === 0 ? (
 
+          <div
+            className="
+              flex
+              min-h-[280px]
+              flex-col
+              items-center
+              justify-center
+              rounded-2xl
+              border
+              border-dashed
+              border-[#dce2dc]
+              bg-[#f8faf8]
+              text-center
+            "
+          >
 
-        {
-          items.length > 0 ? (
+            <PackageSearch
+              size={30}
+              className="
+                text-slate-300
+              "
+            />
 
+            <h3
+              className="
+                mt-3
+                text-sm
+                font-black
+                text-[#17231d]
+              "
+            >
+              Inventory looks healthy
+            </h3>
 
-            items.map((item,index)=>{
+            <p
+              className="
+                mt-1
+                text-xs
+                text-slate-400
+              "
+            >
+              No low-stock products require attention.
+            </p>
 
+          </div>
 
-              const risk = getRisk(item);
+        ) : (
 
+          sortedItems.map(
+            (item) => {
 
-              const percentage = Math.min(
-                100,
-                (
-                  (item.stock || 0) /
-                  ((item.lowStockThreshold || 10) * 3)
-                ) * 100
-              );
+              const stock =
+                Number(
+                  item.stock || 0
+                );
 
+              const threshold =
+                Number(
+                  item.lowStockThreshold ||
+                  item.threshold ||
+                  0
+                );
+
+              const critical =
+                threshold > 0 &&
+                stock <=
+                  Math.max(
+                    2,
+                    Math.floor(
+                      threshold * 0.5
+                    )
+                  );
 
 
               return (
 
                 <div
-
                   key={
-                    item._id ||
-                    index
+                    item.id ||
+                    item.productId ||
+                    item.name
                   }
-
-                  className="
+                  className={`
+                    group
                     rounded-2xl
                     border
-                    border-slate-200
-                    p-5
+                    p-4
                     transition
-                    hover:-translate-y-1
-                    hover:shadow-lg
-                  "
-
+                    hover:-translate-y-0.5
+                    hover:shadow-[0_10px_28px_rgba(16,37,29,0.06)]
+                    ${
+                      critical
+                        ? "border-red-200 bg-red-50/60"
+                        : "border-amber-200 bg-amber-50/40"
+                    }
+                  `}
                 >
-
-
 
                   <div
                     className="
                       flex
                       items-start
                       justify-between
+                      gap-4
                     "
                   >
 
-
-
                     <div
                       className="
-                        flex
-                        gap-4
+                        min-w-0
                       "
                     >
 
-
                       <div
                         className="
-                          rounded-xl
-                          bg-slate-100
-                          p-3
+                          flex
+                          flex-wrap
+                          items-center
+                          gap-2
                         "
                       >
-
-                        <Package
-                          className="
-                            text-slate-700
-                          "
-                        />
-
-                      </div>
-
-
-
-
-
-                      <div>
-
 
                         <h3
                           className="
-                            font-bold
-                            text-slate-900
+                            truncate
+                            text-sm
+                            font-black
+                            text-[#17231d]
                           "
                         >
-
                           {
                             item.name ||
                             item.productName ||
-                            "Unknown Product"
+                            "Unnamed Product"
                           }
-
                         </h3>
 
 
-
-                        <p
-                          className="
-                            mt-1
-                            text-sm
-                            text-slate-500
-                          "
+                        <span
+                          className={`
+                            rounded-full
+                            px-2
+                            py-1
+                            text-[9px]
+                            font-bold
+                            ${
+                              critical
+                                ? "bg-red-100 text-red-700"
+                                : "bg-amber-100 text-amber-700"
+                            }
+                          `}
                         >
-
-                          Stock:
-                          {" "}
-                          {item.stock || 0}
-                          {" "}
-                          units
-
-                        </p>
-
+                          {
+                            critical
+                              ? "Critical"
+                              : "Needs Restock"
+                          }
+                        </span>
 
                       </div>
 
 
-                    </div>
-
-
-
-
-
-
-                    <span
-                      className={`
-                        rounded-full
-                        px-3
-                        py-1
-                        text-xs
-                        font-semibold
-                        ${risk.color}
-                      `}
-                    >
-
-                      {risk.label}
-
-                    </span>
-
-
-                  </div>
-
-
-
-
-
-
-
-
-                  {/* Stock Bar */}
-
-
-                  <div
-                    className="
-                      mt-5
-                    "
-                  >
-
-
-                    <div
-                      className="
-                        flex
-                        justify-between
-                        text-sm
-                      "
-                    >
-
-                      <span
+                      <p
                         className="
-                          text-slate-500
+                          mt-1
+                          text-[10px]
+                          font-semibold
+                          uppercase
+                          tracking-[0.1em]
+                          text-slate-400
                         "
                       >
-                        Stock Level
-                      </span>
-
-
-                      <span
-                        className="
-                          font-medium
-                        "
-                      >
-                        {item.stock || 0}
-                      </span>
-
+                        {
+                          item.category ||
+                          "Inventory Item"
+                        }
+                      </p>
 
                     </div>
 
 
-
-
-                    <div
+                    <ArrowUpRight
+                      size={15}
                       className="
-                        mt-2
-                        h-2
-                        rounded-full
-                        bg-slate-100
-                        overflow-hidden
-                      "
-                    >
-
-
-                      <div
-
-                        className="
-                          h-full
-                          rounded-full
-                          bg-red-500
-                        "
-
-                        style={{
-                          width:`${percentage}%`
-                        }}
-
-                      />
-
-
-
-                    </div>
-
-
-
-                  </div>
-
-
-
-
-
-
-
-
-                  {/* AI Recommendation */}
-
-
-                  <div
-                    className="
-                      mt-5
-                      flex
-                      gap-3
-                      rounded-xl
-                      bg-indigo-50
-                      p-4
-                    "
-                  >
-
-
-                    <Sparkles
-                      size={18}
-                      className="
-                        mt-1
-                        text-indigo-600
+                        shrink-0
+                        text-amber-700
+                        transition
+                        group-hover:translate-x-0.5
+                        group-hover:-translate-y-0.5
                       "
                     />
 
+                  </div>
 
 
-                    <p
+                  <div
+                    className="
+                      mt-4
+                      grid
+                      gap-3
+                      sm:grid-cols-3
+                    "
+                  >
+
+                    <div
                       className="
-                        text-sm
-                        text-indigo-900
+                        rounded-xl
+                        bg-white/70
+                        px-3
+                        py-2.5
                       "
                     >
 
+                      <p
+                        className="
+                          text-[9px]
+                          font-bold
+                          uppercase
+                          tracking-[0.1em]
+                          text-slate-400
+                        "
+                      >
+                        Current Stock
+                      </p>
 
-                      {
-                        (item.stock || 0)
-                        <=
-                        (item.lowStockThreshold || 10)
+                      <strong
+                        className={`
+                          mt-1
+                          block
+                          text-lg
+                          font-black
+                          ${
+                            critical
+                              ? "text-red-700"
+                              : "text-amber-800"
+                          }
+                        `}
+                      >
+                        {stock}
+                      </strong>
 
-                        ?
-
-                        "AI recommends restocking this product soon to avoid missed sales."
-
-                        :
-
-                        "Inventory level is healthy. Continue monitoring demand."
-
-                      }
+                    </div>
 
 
-                    </p>
+                    <div
+                      className="
+                        rounded-xl
+                        bg-white/70
+                        px-3
+                        py-2.5
+                      "
+                    >
 
+                      <p
+                        className="
+                          text-[9px]
+                          font-bold
+                          uppercase
+                          tracking-[0.1em]
+                          text-slate-400
+                        "
+                      >
+                        Threshold
+                      </p>
+
+                      <strong
+                        className="
+                          mt-1
+                          block
+                          text-lg
+                          font-black
+                          text-[#17231d]
+                        "
+                      >
+                        {threshold}
+                      </strong>
+
+                    </div>
+
+
+                    <div
+                      className="
+                        rounded-xl
+                        bg-white/70
+                        px-3
+                        py-2.5
+                      "
+                    >
+
+                      <div
+                        className="
+                          flex
+                          items-center
+                          gap-1.5
+                          text-[9px]
+                          font-bold
+                          uppercase
+                          tracking-[0.1em]
+                          text-slate-400
+                        "
+                      >
+                        <Warehouse
+                          size={12}
+                        />
+
+                        Warehouse
+                      </div>
+
+                      <strong
+                        className="
+                          mt-1
+                          block
+                          truncate
+                          text-sm
+                          font-black
+                          text-[#17231d]
+                        "
+                      >
+                        {
+                          item.warehouse ||
+                          "Not specified"
+                        }
+                      </strong>
+
+                    </div>
 
                   </div>
 
 
+                  <div
+                    className="
+                      mt-4
+                      border-t
+                      border-black/5
+                      pt-3
+                    "
+                  >
 
+                    <p
+                      className="
+                        text-[11px]
+                        leading-5
+                        text-slate-500
+                      "
+                    >
+                      {
+                        critical
+                          ? "Stock is critically low. Restocking should be prioritized."
+                          : "Inventory is below the preferred operating threshold."
+                      }
+                    </p>
 
+                  </div>
 
                 </div>
 
               );
 
-
-            })
-
-
+            }
           )
 
-          :
-
-          (
-
-            <div
-              className="
-                py-10
-                text-center
-                text-slate-400
-              "
-            >
-
-              No inventory risks detected.
-
-            </div>
-
-          )
-
-
-        }
-
-
+        )}
 
       </div>
-
-
 
     </div>
 

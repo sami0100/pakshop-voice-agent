@@ -1,4 +1,6 @@
-import { VoiceAIButton } from "vtk-voice-ai-sdk";
+import {
+  VoiceAIButton,
+} from "vtk-voice-ai-sdk";
 
 import {
   createAdminTools,
@@ -9,12 +11,10 @@ import {
 } from "../../agents/adminAgent/context";
 
 
-
 function AdminVoiceAssistant() {
 
-
-  const adminTools = createAdminTools();
-
+  const adminTools =
+    createAdminTools();
 
 
   return (
@@ -23,11 +23,15 @@ function AdminVoiceAssistant() {
 
       buttonType="pill"
 
-      title="PakShop Admin Analyst"
+      title="PakShop AI Analyst"
 
-      initialContext={adminAgentContext}
+      initialContext={
+        adminAgentContext
+      }
 
-      tools={createAdminTools()}
+      tools={
+        adminTools
+      }
 
     />
 
