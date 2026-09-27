@@ -1,5 +1,6 @@
 const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api/v1";
 
 
 export function createAdminTools() {
@@ -162,57 +163,92 @@ export function createAdminTools() {
 
     },
 
+
     {
-  type: "function",
+      type: "function",
 
-  name: "get_low_stock_items",
+      name: "get_low_stock_items",
 
-  description:
-    "Get products that have low inventory and require restocking.",
-
-
-  parameters: {
-    type: "object",
-    properties: {},
-  },
+      description:
+        "Get products that have low inventory and require restocking.",
 
 
-  execute: async () => {
+      parameters: {
+        type: "object",
+        properties: {},
+      },
 
-    const response = await fetch(
-      `${API_URL}/inventory/low-stock`
-    );
+
+      execute: async () => {
+
+        const response = await fetch(
+          `${API_URL}/inventory/low-stock`
+        );
 
 
-    return await response.json();
+        return await response.json();
 
-  },
+      },
 
-},
-{
-  type: "function",
+    },
 
-  name: "get_business_overview",
 
-  description:
-    "Get a complete executive overview of PakShop including total revenue, total orders, average order value, top customers, trending products, and low-stock inventory risks. Use this when the admin asks for a store summary, business overview, overall performance, how the store is doing, what needs attention, or a general business health report.",
+    {
+      type: "function",
 
-  parameters: {
-    type: "object",
-    properties: {},
-  },
+      name: "get_business_overview",
 
-  execute: async () => {
+      description:
+        "Get a complete executive overview of PakShop including total revenue, total orders, average order value, top customers, trending products, and low-stock inventory risks. Use this when the admin asks for a store summary, business overview, overall performance, how the store is doing, what needs attention, or a general business health report.",
 
-    const response = await fetch(
-      `${API_URL}/analytics/business-overview`
-    );
+      parameters: {
+        type: "object",
+        properties: {},
+      },
 
-    return await response.json();
 
-  },
+      execute: async () => {
 
-},
+        const response = await fetch(
+          `${API_URL}/analytics/business-overview`
+        );
+
+
+        return await response.json();
+
+      },
+
+    },
+
+
+    {
+      type: "function",
+
+      name: "get_support_overview",
+
+      description:
+        "Get customer service analytics including total support tickets, open tickets, resolved tickets, total return requests, pending return requests, processed returns, items requiring attention, recent support tickets, and recent return requests. Use this when the admin asks about customer complaints, support workload, unresolved issues, pending returns, customer service health, or support activity.",
+
+
+      parameters: {
+        type: "object",
+        properties: {},
+      },
+
+
+      execute: async () => {
+
+        const response = await fetch(
+          `${API_URL}/analytics/support-overview`
+        );
+
+
+        return await response.json();
+
+      },
+
+    },
+
   ];
 
 }
