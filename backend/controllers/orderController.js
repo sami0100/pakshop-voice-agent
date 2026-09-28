@@ -92,10 +92,21 @@ export const createOrder = async (req, res) => {
 
     const order = new Order({
 
-      id: req.body.orderNumber,
+      id:
+        req.body.orderNumber,
+
+
+      orderNumber:
+        req.body.orderNumber,
+
 
       customerId:
         req.body.customerId,
+
+
+      customer:
+        req.body.customer,
+
 
       date:
         req.body.placedAt
@@ -105,6 +116,18 @@ export const createOrder = async (req, res) => {
 
       status:
         req.body.status || "Processing",
+
+
+      trackingStatus:
+        req.body.trackingStatus,
+
+
+      trackingHistory:
+        req.body.trackingHistory || [],
+
+
+      delivery:
+        req.body.delivery,
 
 
       items:

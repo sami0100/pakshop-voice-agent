@@ -1,3 +1,8 @@
+import {
+  getCustomerId,
+} from "../../utils/customerIdentity";
+
+
 const API_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:5000/api/v1";
@@ -29,13 +34,24 @@ export function createSupportTools() {
       try {
 
         const customerId =
-          "DEMO-CUSTOMER-001";
+          getCustomerId();
 
 
         const response =
           await fetch(
             `${API_URL}/orders/customer/${customerId}`
           );
+
+
+        if (!response.ok) {
+
+          return {
+            success: false,
+            message:
+              "Unable to retrieve order information.",
+          };
+
+        }
 
 
         const orders =
@@ -138,7 +154,7 @@ export function createSupportTools() {
       try {
 
         const customerId =
-          "DEMO-CUSTOMER-001";
+          getCustomerId();
 
 
         const response =
@@ -147,9 +163,30 @@ export function createSupportTools() {
           );
 
 
+        if (!response.ok) {
+
+          return {
+            success: false,
+            message:
+              "Unable to retrieve order history.",
+          };
+
+        }
+
+
         const orders =
           await response.json();
 
+
+        if (!orders || orders.length === 0) {
+
+          return {
+            success: false,
+            message:
+              "No orders found.",
+          };
+
+        }
 
 
         return {
@@ -193,12 +230,9 @@ export function createSupportTools() {
 
 
         return {
-
           success: false,
-
           message:
             "Could not retrieve order history.",
-
         };
 
       }
@@ -258,6 +292,10 @@ export function createSupportTools() {
 
       try {
 
+        const customerId =
+          getCustomerId();
+
+
         const response =
           await fetch(
             `${API_URL}/support/tickets`,
@@ -276,8 +314,7 @@ export function createSupportTools() {
                 ticketId:
                   `TKT-${Date.now()}`,
 
-                customerId:
-                  "DEMO-CUSTOMER-001",
+                customerId,
 
                 orderNumber,
 
@@ -291,9 +328,19 @@ export function createSupportTools() {
           );
 
 
+        if (!response.ok) {
+
+          return {
+            success: false,
+            message:
+              "Unable to create support ticket.",
+          };
+
+        }
+
+
         const ticket =
           await response.json();
-
 
 
         return {
@@ -323,12 +370,9 @@ export function createSupportTools() {
 
 
         return {
-
           success: false,
-
           message:
             "Could not create ticket.",
-
         };
 
       }
@@ -382,9 +426,19 @@ export function createSupportTools() {
           );
 
 
+        if (!response.ok) {
+
+          return {
+            success: false,
+            message:
+              "Support ticket not found.",
+          };
+
+        }
+
+
         const ticket =
           await response.json();
-
 
 
         return {
@@ -405,12 +459,9 @@ export function createSupportTools() {
 
 
         return {
-
           success: false,
-
           message:
             "Could not retrieve ticket.",
-
         };
 
       }
@@ -466,6 +517,10 @@ export function createSupportTools() {
 
       try {
 
+        const customerId =
+          getCustomerId();
+
+
         const response =
           await fetch(
             `${API_URL}/returns`,
@@ -484,8 +539,7 @@ export function createSupportTools() {
                 returnId:
                   `RET-${Date.now()}`,
 
-                customerId:
-                  "DEMO-CUSTOMER-001",
+                customerId,
 
                 orderNumber,
 
@@ -500,9 +554,19 @@ export function createSupportTools() {
           );
 
 
+        if (!response.ok) {
+
+          return {
+            success: false,
+            message:
+              "Unable to create return request.",
+          };
+
+        }
+
+
         const returnRequest =
           await response.json();
-
 
 
         return {
@@ -526,12 +590,9 @@ export function createSupportTools() {
 
 
         return {
-
           success: false,
-
           message:
             "Could not create return request.",
-
         };
 
       }
@@ -585,9 +646,19 @@ export function createSupportTools() {
           );
 
 
+        if (!response.ok) {
+
+          return {
+            success: false,
+            message:
+              "Return request not found.",
+          };
+
+        }
+
+
         const returnRequest =
           await response.json();
-
 
 
         return {
@@ -608,12 +679,9 @@ export function createSupportTools() {
 
 
         return {
-
           success: false,
-
           message:
             "Could not retrieve return status.",
-
         };
 
       }

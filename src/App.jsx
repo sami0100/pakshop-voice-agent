@@ -4,6 +4,10 @@ import {
   Route,
 } from "react-router-dom";
 
+import {
+  getCustomerId,
+} from "./utils/customerIdentity";
+
 import AdminDashboard from "./pages/AdminDashboard";
 
 import {
@@ -16,6 +20,7 @@ import {
 import { VoiceAIButton } from "vtk-voice-ai-sdk";
 import { products } from "./products";
 import { createCustomerTools } from "./agents/customerAgent/tools";
+import { createSupportTools } from "./agents/supportAgent/tools";
 
 /* =========================================================
    CHECKOUT CONFIG
@@ -398,10 +403,62 @@ const [recentlyViewed, setRecentlyViewed] =
     setIsOrdersOpen,
   ] = useState(false);
 
-  const [
-    selectedOrder,
-    setSelectedOrder,
-  ] = useState(null);
+const [
+  isSupportOpen,
+  setIsSupportOpen,
+] = useState(false);
+
+const [
+  supportTickets,
+  setSupportTickets,
+] = useState([]);
+
+const [
+  returnRequests,
+  setReturnRequests,
+] = useState([]);
+
+const [
+  isSupportFormOpen,
+  setIsSupportFormOpen,
+] = useState(false);
+
+const [
+  supportForm,
+  setSupportForm,
+] = useState({
+  orderNumber: "",
+  issue: "",
+  priority: "Medium",
+});
+
+const [
+  supportFormMessage,
+  setSupportFormMessage,
+] = useState("");
+
+const [
+  isReturnFormOpen,
+  setIsReturnFormOpen,
+] = useState(false);
+
+const [
+  returnForm,
+  setReturnForm,
+] = useState({
+  orderNumber: "",
+  reason: "",
+});
+
+const [
+  returnFormMessage,
+  setReturnFormMessage,
+] = useState("");
+
+const [
+  selectedOrder,
+  setSelectedOrder,
+] = useState(null);
 
   /* =========================================================
      FORMATTERS
@@ -523,6 +580,7 @@ const [recentlyViewed, setRecentlyViewed] =
     setIsWishlistOpen(false);
     setIsCheckoutOpen(false);
     setIsOrdersOpen(false);
+    setIsSupportOpen(false);
     setIsMobileMenuOpen(false);
 
     setSelectedOrder(null);
@@ -547,6 +605,237 @@ const [recentlyViewed, setRecentlyViewed] =
     scrollToProducts();
   };
 
+const loadSupportTickets = async () => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/support/tickets/customer/${getCustomerId()}`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Failed to load support tickets."
+      );
+    }
+
+    const tickets =
+      await response.json();
+
+    setSupportTickets(tickets);
+  } catch (error) {
+    console.error(
+      "loadSupportTickets error:",
+      error
+    );
+
+    setSupportTickets([]);
+  }
+};
+
+
+const loadReturnRequests = async () => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/returns/customer/${getCustomerId()}`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Failed to load return requests."
+      );
+    }
+
+    const returns =
+      await response.json();
+
+    setReturnRequests(returns);
+  } catch (error) {
+    console.error(
+      "loadReturnRequests error:",
+      error
+    );
+
+    setReturnRequests([]);
+  }
+};
+
+const createSupportTicketFromUI = async () => {
+  const orderNumber =
+    supportForm.orderNumber.trim();
+
+  const issue =
+    supportForm.issue.trim();
+
+  const priority =
+    supportForm.priority || "Medium";
+
+
+  if (!orderNumber || !issue) {
+    setSupportFormMessage(
+      "Please select an order and describe the issue."
+    );
+
+    return;
+  }
+
+
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/support/tickets`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+          ticketId:
+            `TKT-${Date.now()}`,
+
+          customerId:
+            getCustomerId(),
+
+          orderNumber,
+
+          issue,
+
+          priority,
+        }),
+      }
+    );
+
+
+    if (!response.ok) {
+      throw new Error(
+        "Failed to create support ticket."
+      );
+    }
+
+
+    await response.json();
+
+
+    setSupportForm({
+      orderNumber: "",
+      issue: "",
+      priority: "Medium",
+    });
+
+
+    setSupportFormMessage(
+      "Support ticket created successfully."
+    );
+
+
+    await loadSupportTickets();
+
+
+    setTimeout(() => {
+      setIsSupportFormOpen(false);
+      setSupportFormMessage("");
+    }, 700);
+
+
+  } catch (error) {
+    console.error(
+      "createSupportTicketFromUI error:",
+      error
+    );
+
+    setSupportFormMessage(
+      "Unable to create support ticket."
+    );
+  }
+};
+
+const createReturnRequestFromUI = async () => {
+  const orderNumber =
+    returnForm.orderNumber.trim();
+
+  const reason =
+    returnForm.reason.trim();
+
+
+  if (!orderNumber || !reason) {
+    setReturnFormMessage(
+      "Please select an order and provide a return reason."
+    );
+
+    return;
+  }
+
+
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/returns`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+          returnId:
+            `RET-${Date.now()}`,
+
+          customerId:
+            getCustomerId(),
+
+          orderNumber,
+
+          reason,
+
+          status:
+            "Requested",
+        }),
+      }
+    );
+
+
+    if (!response.ok) {
+      throw new Error(
+        "Failed to create return request."
+      );
+    }
+
+
+    await response.json();
+
+
+    setReturnForm({
+      orderNumber: "",
+      reason: "",
+    });
+
+
+    setReturnFormMessage(
+      "Return request created successfully."
+    );
+
+
+    await loadReturnRequests();
+
+
+    setTimeout(() => {
+      setIsReturnFormOpen(false);
+      setReturnFormMessage("");
+    }, 700);
+
+
+  } catch (error) {
+    console.error(
+      "createReturnRequestFromUI error:",
+      error
+    );
+
+    setReturnFormMessage(
+      "Unable to create return request."
+    );
+  }
+};
   const handleNewsletterSubmit = (
     event
   ) => {
@@ -859,6 +1148,7 @@ const closeProductDetails = () => {
 
     setSelectedOrder(null);
     setIsOrdersOpen(true);
+    
   };
 
   const closeOrders = () => {
@@ -866,6 +1156,19 @@ const closeProductDetails = () => {
     setSelectedOrder(null);
   };
 
+   const openSupport = async () => {
+  await Promise.all([
+    loadSupportTickets(),
+    loadReturnRequests(),
+  ]);
+
+  setIsSupportOpen(true);
+};
+
+
+  const closeSupport = () => {
+  setIsSupportOpen(false);
+  };
   const openOrderDetails = (
     order
   ) => {
@@ -2425,9 +2728,26 @@ const closeProductDetails = () => {
          },
 
          body: JSON.stringify({
-           ...order,
-           customerId: "DEMO-CUSTOMER-001",
-         }),
+  ...order,
+
+  orderNumber:
+    order.orderNumber,
+
+  customerId:
+    getCustomerId(),
+
+  customer:
+    order.customer,
+
+  delivery:
+    order.delivery,
+
+  trackingStatus:
+    order.trackingStatus,
+
+  trackingHistory:
+    order.trackingHistory,
+}),
        }
      );
 
@@ -2577,6 +2897,12 @@ const closeProductDetails = () => {
     submitOrder,
   });
 
+  const supportTools = createSupportTools();
+
+const allCustomerTools = [
+  ...customerTools,
+  ...supportTools,
+];
 
   /* =========================================================
      SEARCH / FILTER / SORT
@@ -3190,6 +3516,22 @@ TOOL RULES:
               </b>
             )}
           </button>
+            
+            <button
+  className="header-icon-action support-header-badge"
+  onClick={
+    openSupport
+  }
+>
+  <span className="header-action-icon">
+    💬
+  </span>
+
+  <span className="header-action-label">
+    Support
+  </span>
+</button>
+
 
           <button
             className="header-icon-action cart-badge cart-trigger"
@@ -7191,6 +7533,687 @@ TOOL RULES:
         </div>
       )}
 
+{/* =====================================================
+    SUPPORT CENTER
+====================================================== */}
+
+{isSupportOpen && (
+  <div className="support-overlay">
+    <div className="support-shell">
+
+      {/* =================================================
+          SUPPORT HEADER
+      ================================================== */}
+
+      <header className="support-header">
+        <div>
+          <p>
+            PAKSHOP ACCOUNT
+          </p>
+
+          <h2>
+            Customer Support
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={
+            closeSupport
+          }
+          aria-label="Close support center"
+        >
+          ×
+        </button>
+      </header>
+
+
+      {/* =================================================
+          SUPPORT ACTIONS
+      ================================================== */}
+
+      <div className="support-actions-bar">
+
+  <div>
+    <strong>
+      Need help with an order?
+    </strong>
+
+    <span>
+      Report an issue or request a return from your Support Center.
+    </span>
+  </div>
+
+
+  <div className="support-action-buttons">
+
+    <button
+      type="button"
+      onClick={() => {
+        setReturnFormMessage("");
+        setIsReturnFormOpen(false);
+
+        setIsSupportFormOpen(
+          (current) =>
+            !current
+        );
+      }}
+    >
+      {isSupportFormOpen
+        ? "Cancel Issue"
+        : "+ Report an Issue"}
+    </button>
+
+
+    <button
+      type="button"
+      onClick={() => {
+        setSupportFormMessage("");
+        setIsSupportFormOpen(false);
+
+        setIsReturnFormOpen(
+          (current) =>
+            !current
+        );
+      }}
+    >
+      {isReturnFormOpen
+        ? "Cancel Return"
+        : "↩ Request a Return"}
+    </button>
+
+  </div>
+
+</div>
+
+
+      {/* =================================================
+          CREATE SUPPORT TICKET FORM
+      ================================================== */}
+
+      {isSupportFormOpen && (
+
+        <form
+          className="support-create-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+
+            createSupportTicketFromUI();
+          }}
+        >
+
+          <div className="support-form-heading">
+
+            <div>
+              <p>
+                CUSTOMER SERVICE
+              </p>
+
+              <h3>
+                Report an Issue
+              </h3>
+            </div>
+
+            <span>
+              Creates a support ticket
+            </span>
+
+          </div>
+
+
+          <div className="support-form-grid">
+
+            <label>
+              <span>
+                Order
+              </span>
+
+              <select
+                value={
+                  supportForm.orderNumber
+                }
+                onChange={(event) =>
+                  setSupportForm(
+                    (current) => ({
+                      ...current,
+
+                      orderNumber:
+                        event.target.value,
+                    })
+                  )
+                }
+              >
+                <option value="">
+                  Select an order
+                </option>
+
+                {orders.map(
+                  (order) => (
+                    <option
+                      key={
+                        order.orderNumber
+                      }
+                      value={
+                        order.orderNumber
+                      }
+                    >
+                      {
+                        order.orderNumber
+                      }
+                      {" — "}
+                      {formatPKR(
+                        order.total
+                      )}
+                    </option>
+                  )
+                )}
+
+              </select>
+            </label>
+
+
+            <label>
+              <span>
+                Priority
+              </span>
+
+              <select
+                value={
+                  supportForm.priority
+                }
+                onChange={(event) =>
+                  setSupportForm(
+                    (current) => ({
+                      ...current,
+
+                      priority:
+                        event.target.value,
+                    })
+                  )
+                }
+              >
+                <option value="Low">
+                  Low
+                </option>
+
+                <option value="Medium">
+                  Medium
+                </option>
+
+                <option value="High">
+                  High
+                </option>
+              </select>
+            </label>
+
+          </div>
+
+
+          <label className="support-issue-field">
+
+            <span>
+              What happened?
+            </span>
+
+            <textarea
+              rows="4"
+              placeholder="Describe the issue with your order..."
+              value={
+                supportForm.issue
+              }
+              onChange={(event) =>
+                setSupportForm(
+                  (current) => ({
+                    ...current,
+
+                    issue:
+                      event.target.value,
+                  })
+                )
+              }
+            />
+
+          </label>
+
+
+          {supportFormMessage && (
+            <p className="support-form-message">
+              {
+                supportFormMessage
+              }
+            </p>
+          )}
+
+
+          <div className="support-form-actions">
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsSupportFormOpen(
+                  false
+                );
+
+                setSupportFormMessage(
+                  ""
+                );
+              }}
+            >
+              Cancel
+            </button>
+
+
+            <button
+              type="submit"
+            >
+              Submit Support Request
+            </button>
+
+          </div>
+
+        </form>
+
+      )}
+
+{isReturnFormOpen && (
+
+  <form
+    className="support-create-form"
+    onSubmit={(event) => {
+      event.preventDefault();
+
+      createReturnRequestFromUI();
+    }}
+  >
+
+    <div className="support-form-heading">
+
+      <div>
+        <p>
+          RETURNS
+        </p>
+
+        <h3>
+          Request a Return
+        </h3>
+      </div>
+
+      <span>
+        Creates a return request
+      </span>
+
+    </div>
+
+
+    <div className="support-form-grid">
+
+      <label>
+        <span>
+          Order
+        </span>
+
+        <select
+          value={
+            returnForm.orderNumber
+          }
+          onChange={(event) =>
+            setReturnForm(
+              (current) => ({
+                ...current,
+
+                orderNumber:
+                  event.target.value,
+              })
+            )
+          }
+        >
+          <option value="">
+            Select an order
+          </option>
+
+          {orders.map(
+            (order) => (
+              <option
+                key={
+                  order.orderNumber
+                }
+                value={
+                  order.orderNumber
+                }
+              >
+                {
+                  order.orderNumber
+                }
+                {" — "}
+                {formatPKR(
+                  order.total
+                )}
+              </option>
+            )
+          )}
+
+        </select>
+      </label>
+
+    </div>
+
+
+    <label className="support-issue-field">
+
+      <span>
+        Return reason
+      </span>
+
+      <textarea
+        rows="4"
+        placeholder="Tell us why you want to return this order..."
+        value={
+          returnForm.reason
+        }
+        onChange={(event) =>
+          setReturnForm(
+            (current) => ({
+              ...current,
+
+              reason:
+                event.target.value,
+            })
+          )
+        }
+      />
+
+    </label>
+
+
+    {returnFormMessage && (
+      <p className="support-form-message">
+        {
+          returnFormMessage
+        }
+      </p>
+    )}
+
+
+    <div className="support-form-actions">
+
+      <button
+        type="button"
+        onClick={() => {
+          setIsReturnFormOpen(
+            false
+          );
+
+          setReturnFormMessage(
+            ""
+          );
+        }}
+      >
+        Cancel
+      </button>
+
+
+      <button
+        type="submit"
+      >
+        Submit Return Request
+      </button>
+
+    </div>
+
+  </form>
+
+)}
+
+      {/* =================================================
+          SUPPORT CONTENT
+      ================================================== */}
+
+      <div className="support-content">
+
+
+        {/* ===============================================
+            SUPPORT TICKETS
+        ================================================ */}
+
+        <section className="support-section">
+
+          <div className="support-section-heading">
+
+            <div>
+              <p>
+                SUPPORT REQUESTS
+              </p>
+
+              <h3>
+                My Tickets
+              </h3>
+            </div>
+
+            <span>
+              {
+                supportTickets.length
+              }
+            </span>
+
+          </div>
+
+
+          {supportTickets.length ===
+          0 ? (
+
+            <div className="support-empty">
+
+              <div>
+                💬
+              </div>
+
+              <strong>
+                No support tickets
+              </strong>
+
+              <p>
+                Your customer support requests will appear here.
+              </p>
+
+            </div>
+
+          ) : (
+
+            <div className="support-card-list">
+
+              {supportTickets.map(
+                (ticket) => (
+
+                  <article
+                    className="support-card"
+                    key={
+                      ticket.ticketId
+                    }
+                  >
+
+                    <div className="support-card-top">
+
+                      <div>
+                        <span>
+                          Ticket
+                        </span>
+
+                        <strong>
+                          {
+                            ticket.ticketId
+                          }
+                        </strong>
+                      </div>
+
+
+                      <span className="support-status-badge">
+                        {
+                          ticket.status
+                        }
+                      </span>
+
+                    </div>
+
+
+                    <p className="support-card-issue">
+                      {
+                        ticket.issue
+                      }
+                    </p>
+
+
+                    <div className="support-card-meta">
+
+                      <span>
+                        Order{" "}
+                        {
+                          ticket.orderNumber
+                        }
+                      </span>
+
+                      <span>
+                        Priority:{" "}
+                        {
+                          ticket.priority
+                        }
+                      </span>
+
+                    </div>
+
+                  </article>
+
+                )
+              )}
+
+            </div>
+
+          )}
+
+        </section>
+
+
+        {/* ===============================================
+            RETURN REQUESTS
+        ================================================ */}
+
+        <section className="support-section">
+
+          <div className="support-section-heading">
+
+            <div>
+              <p>
+                RETURNS
+              </p>
+
+              <h3>
+                My Return Requests
+              </h3>
+            </div>
+
+            <span>
+              {
+                returnRequests.length
+              }
+            </span>
+
+          </div>
+
+
+          {returnRequests.length ===
+          0 ? (
+
+            <div className="support-empty">
+
+              <div>
+                ↩
+              </div>
+
+              <strong>
+                No return requests
+              </strong>
+
+              <p>
+                Your return requests will appear here.
+              </p>
+
+            </div>
+
+          ) : (
+
+            <div className="support-card-list">
+
+              {returnRequests.map(
+                (
+                  returnRequest
+                ) => (
+
+                  <article
+                    className="support-card"
+                    key={
+                      returnRequest.returnId
+                    }
+                  >
+
+                    <div className="support-card-top">
+
+                      <div>
+                        <span>
+                          Return
+                        </span>
+
+                        <strong>
+                          {
+                            returnRequest.returnId
+                          }
+                        </strong>
+                      </div>
+
+
+                      <span className="support-status-badge">
+                        {
+                          returnRequest.status
+                        }
+                      </span>
+
+                    </div>
+
+
+                    <p className="support-card-issue">
+                      {
+                        returnRequest.reason
+                      }
+                    </p>
+
+
+                    <div className="support-card-meta">
+
+                      <span>
+                        Order{" "}
+                        {
+                          returnRequest.orderNumber
+                        }
+                      </span>
+
+                    </div>
+
+                  </article>
+
+                )
+              )}
+
+            </div>
+
+          )}
+
+        </section>
+
+      </div>
+
+    </div>
+  </div>
+)}
+
+
       {/* =====================================================
           ORDERS
       ====================================================== */}
@@ -7707,7 +8730,7 @@ TOOL RULES:
         initialContext={
           pakShopContext
         }
-        tools={customerTools}
+        tools={allCustomerTools}
       />
     </div>
   );

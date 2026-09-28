@@ -52,7 +52,6 @@ function RevenueChart({
 
     <div
       className="
-        h-full
         w-full
         overflow-hidden
         rounded-[24px]
@@ -64,10 +63,6 @@ function RevenueChart({
         md:p-6
       "
     >
-
-      {/* ================================================
-          HEADER
-      ================================================= */}
 
       <div
         className="
@@ -184,7 +179,7 @@ function RevenueChart({
               text-[#17231d]
             "
           >
-            $
+            PKR{" "}
             {
               totalRevenue.toLocaleString()
             }
@@ -194,10 +189,6 @@ function RevenueChart({
 
       </div>
 
-
-      {/* ================================================
-          MINI SUMMARY
-      ================================================= */}
 
       <div
         className="
@@ -279,9 +270,7 @@ function RevenueChart({
 
             <TrendingUp
               size={15}
-              className="
-                text-emerald-700
-              "
+              className="text-emerald-700"
             />
 
             <strong
@@ -293,7 +282,7 @@ function RevenueChart({
             >
               {
                 bestDay
-                  ? `$${Number(
+                  ? `PKR ${Number(
                       bestDay.revenue || 0
                     ).toLocaleString()}`
                   : "No data"
@@ -306,10 +295,6 @@ function RevenueChart({
 
       </div>
 
-
-      {/* ================================================
-          CHART
-      ================================================= */}
 
       <div
         className="
@@ -328,9 +313,7 @@ function RevenueChart({
             >
 
               <AreaChart
-                data={
-                  data
-                }
+                data={data}
                 margin={{
                   top: 10,
                   right: 10,
@@ -397,17 +380,11 @@ function RevenueChart({
 
                 <Tooltip
                   contentStyle={{
-                    borderRadius:
-                      "12px",
-
-                    border:
-                      "1px solid #dfe5df",
-
+                    borderRadius: "12px",
+                    border: "1px solid #dfe5df",
                     boxShadow:
                       "0 14px 35px rgba(16,37,29,0.12)",
-
-                    fontSize:
-                      "12px",
+                    fontSize: "12px",
                   }}
                 />
 
@@ -450,9 +427,7 @@ function RevenueChart({
 
               <BarChart3
                 size={26}
-                className="
-                  text-slate-300
-                "
+                className="text-slate-300"
               />
 
               <p

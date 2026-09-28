@@ -23,7 +23,6 @@ function InventoryAlerts({
 
     <div
       className="
-        h-full
         rounded-[24px]
         border
         border-[#dfe5df]
@@ -33,10 +32,6 @@ function InventoryAlerts({
         md:p-6
       "
     >
-
-      {/* ================================================
-          HEADER
-      ================================================= */}
 
       <div
         className="
@@ -69,7 +64,9 @@ function InventoryAlerts({
               text-amber-700
             "
           >
-            <AlertTriangle size={18} />
+            <AlertTriangle
+              size={18}
+            />
           </div>
 
 
@@ -136,10 +133,6 @@ function InventoryAlerts({
       </p>
 
 
-      {/* ================================================
-          ITEMS
-      ================================================= */}
-
       <div
         className="
           mt-5
@@ -152,7 +145,7 @@ function InventoryAlerts({
           <div
             className="
               flex
-              min-h-[280px]
+              min-h-[220px]
               flex-col
               items-center
               justify-center
@@ -167,9 +160,7 @@ function InventoryAlerts({
 
             <PackageSearch
               size={30}
-              className="
-                text-slate-300
-              "
+              className="text-slate-300"
             />
 
             <h3
@@ -218,7 +209,8 @@ function InventoryAlerts({
                   Math.max(
                     2,
                     Math.floor(
-                      threshold * 0.5
+                      threshold *
+                        0.5
                     )
                   );
 
@@ -256,11 +248,7 @@ function InventoryAlerts({
                     "
                   >
 
-                    <div
-                      className="
-                        min-w-0
-                      "
-                    >
+                    <div className="min-w-0">
 
                       <div
                         className="
@@ -335,9 +323,6 @@ function InventoryAlerts({
                       className="
                         shrink-0
                         text-amber-700
-                        transition
-                        group-hover:translate-x-0.5
-                        group-hover:-translate-y-0.5
                       "
                     />
 

@@ -1,4 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL =
+  import.meta.env.VITE_API_URL;
 
 
 export async function getRevenue() {
@@ -7,10 +8,32 @@ export async function getRevenue() {
     `${API_URL}/analytics/revenue`
   );
 
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load revenue."
+    );
+  }
+
   return await response.json();
 
 }
 
+
+export async function getDashboardSummary() {
+
+  const response = await fetch(
+    `${API_URL}/analytics/dashboard-summary`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load dashboard summary."
+    );
+  }
+
+  return await response.json();
+
+}
 
 
 export async function getTopCustomers() {
@@ -19,10 +42,15 @@ export async function getTopCustomers() {
     `${API_URL}/analytics/top-customers`
   );
 
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load top customers."
+    );
+  }
+
   return await response.json();
 
 }
-
 
 
 export async function getTrendingProducts() {
@@ -31,10 +59,15 @@ export async function getTrendingProducts() {
     `${API_URL}/analytics/trending-products`
   );
 
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load trending products."
+    );
+  }
+
   return await response.json();
 
 }
-
 
 
 export async function getSalesTrend() {
@@ -43,10 +76,15 @@ export async function getSalesTrend() {
     `${API_URL}/analytics/sales-trend`
   );
 
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load sales trend."
+    );
+  }
+
   return await response.json();
 
 }
-
 
 
 export async function getLowStockItems() {
@@ -54,6 +92,29 @@ export async function getLowStockItems() {
   const response = await fetch(
     `${API_URL}/inventory/low-stock`
   );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load low-stock inventory."
+    );
+  }
+
+  return await response.json();
+
+}
+
+
+export async function getSupportOverview() {
+
+  const response = await fetch(
+    `${API_URL}/analytics/support-overview`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load customer service analytics."
+    );
+  }
 
   return await response.json();
 

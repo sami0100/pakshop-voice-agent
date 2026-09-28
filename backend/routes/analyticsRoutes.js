@@ -7,6 +7,8 @@ import {
   getTrendingProducts,
   getSalesTrend,
   getBusinessOverview,
+  getSupportOverview,
+  getDashboardSummary,
 } from "../controllers/analyticsController.js";
 
 
@@ -48,5 +50,13 @@ router.get(
   getBusinessOverview
 );
 
+router.get(
+  "/support-overview",
+  getSupportOverview
+);
 
+router.get(
+  "/dashboard-summary",
+  getDashboardSummary
+);
 export default router;

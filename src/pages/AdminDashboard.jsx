@@ -260,8 +260,12 @@ function AdminDashboard() {
 
           <AIInsightCard
 
-            revenue={
-              revenue
+            dashboardSummary={
+              dashboardSummary
+            }
+
+            supportOverview={
+              supportOverview
             }
 
             products={
@@ -270,10 +274,6 @@ function AdminDashboard() {
 
             inventory={
               lowStock
-            }
-
-            customers={
-              customers
             }
 
           />
@@ -354,8 +354,6 @@ function AdminDashboard() {
             "
           >
 
-            {/* REVENUE */}
-
             <AnimatedCard
               delay={0.1}
             >
@@ -406,8 +404,6 @@ function AdminDashboard() {
             </AnimatedCard>
 
 
-            {/* ORDERS */}
-
             <AnimatedCard
               delay={0.2}
             >
@@ -453,8 +449,6 @@ function AdminDashboard() {
 
             </AnimatedCard>
 
-
-            {/* CUSTOMERS */}
 
             <AnimatedCard
               delay={0.3}
@@ -503,8 +497,6 @@ function AdminDashboard() {
 
             </AnimatedCard>
 
-
-            {/* INVENTORY */}
 
             <AnimatedCard
               delay={0.4}
@@ -651,9 +643,6 @@ function AdminDashboard() {
         <section
           className="
             mt-6
-            grid
-            gap-5
-            xl:grid-cols-[1.5fr_0.9fr]
           "
         >
 
@@ -669,6 +658,18 @@ function AdminDashboard() {
 
           </AnimatedCard>
 
+        </section>
+
+
+        {/* =================================================
+            TRENDING PRODUCTS
+        ================================================== */}
+
+        <section
+          className="
+            mt-5
+          "
+        >
 
           <AnimatedCard
             delay={0.7}
@@ -686,15 +687,12 @@ function AdminDashboard() {
 
 
         {/* =================================================
-            INVENTORY + CUSTOMERS
+            INVENTORY RISK
         ================================================== */}
 
         <section
           className="
             mt-5
-            grid
-            gap-5
-            xl:grid-cols-[0.85fr_1.15fr]
           "
         >
 
@@ -710,6 +708,18 @@ function AdminDashboard() {
 
           </AnimatedCard>
 
+        </section>
+
+
+        {/* =================================================
+            CUSTOMER INTELLIGENCE
+        ================================================== */}
+
+        <section
+          className="
+            mt-5
+          "
+        >
 
           <AnimatedCard
             delay={0.9}

@@ -1,6 +1,8 @@
 import Order from "../models/Order.js";
 import Customer from "../models/Customer.js";
 import Inventory from "../models/Inventory.js";
+import SupportTicket from "../models/SupportTicket.js";
+import ReturnRequest from "../models/ReturnRequest.js";
 
 
 // =====================================
@@ -132,33 +134,202 @@ export const getRevenueByPeriod = async (req, res) => {
 
 // =====================================
 // Top Customers
+// Calculated dynamically from real orders
 // =====================================
 export const getTopCustomers = async (req, res) => {
 
   try {
 
-    const customers = await Customer.find()
+    const customers =
+      await Order.aggregate([
 
-      .sort({
-        totalSpent: -1,
-      })
+        // Latest order first so the most recent
+        // customer profile is used for demo customers.
+        {
+          $sort: {
+            date: -1,
+          },
+        },
 
-      .limit(5);
+
+        // Group all orders by customer.
+        {
+          $group: {
+
+            _id:
+              "$customerId",
 
 
-    res.json(customers);
+            totalSpent: {
+              $sum:
+                "$totalAmount",
+            },
+
+
+            totalOrders: {
+              $sum: 1,
+            },
+
+
+            orderCustomerName: {
+              $first:
+                "$customer.fullName",
+            },
+
+
+            orderCustomerEmail: {
+              $first:
+                "$customer.email",
+            },
+
+
+            orderCustomerCity: {
+              $first:
+                "$delivery.city",
+            },
+
+          },
+        },
+
+
+        // Match seeded customer information
+        // when the customer exists in customers.
+        {
+          $lookup: {
+
+            from:
+              "customers",
+
+            localField:
+              "_id",
+
+            foreignField:
+              "id",
+
+            as:
+              "customer",
+
+          },
+        },
+
+
+        {
+          $unwind: {
+
+            path:
+              "$customer",
+
+            preserveNullAndEmptyArrays:
+              true,
+
+          },
+        },
+
+
+        // Return the same shape expected
+        // by the existing admin UI.
+        {
+          $project: {
+
+            _id: 0,
+
+
+            id:
+              "$_id",
+
+
+            name: {
+
+              $ifNull: [
+
+                "$customer.name",
+
+                {
+                  $ifNull: [
+                    "$orderCustomerName",
+                    "$_id",
+                  ],
+                },
+
+              ],
+
+            },
+
+
+            email: {
+
+              $ifNull: [
+
+                "$customer.email",
+
+                {
+                  $ifNull: [
+                    "$orderCustomerEmail",
+                    "",
+                  ],
+                },
+
+              ],
+
+            },
+
+
+            city: {
+
+              $ifNull: [
+
+                "$customer.city",
+
+                {
+                  $ifNull: [
+                    "$orderCustomerCity",
+                    "",
+                  ],
+                },
+
+              ],
+
+            },
+
+
+            totalOrders: 1,
+
+            totalSpent: 1,
+
+          },
+        },
+
+
+        // Highest real spending first.
+        {
+          $sort: {
+            totalSpent: -1,
+          },
+        },
+
+
+        {
+          $limit: 5,
+        },
+
+      ]);
+
+
+    res.json(
+      customers
+    );
 
 
   } catch (error) {
 
     res.status(500).json({
-      message: error.message,
+      message:
+        error.message,
     });
 
   }
 
 };
-
 
 
 
@@ -598,6 +769,439 @@ export const getBusinessOverview = async (req, res) => {
 
       message: error.message,
 
+    });
+
+  }
+
+};
+
+// =====================================
+// Customer Support Overview
+// Support tickets + return requests
+// =====================================
+export const getSupportOverview = async (req, res) => {
+
+  try {
+
+    const [
+      totalTickets,
+      openTickets,
+      totalReturns,
+      requestedReturns,
+      recentTickets,
+      recentReturns,
+    ] = await Promise.all([
+
+      SupportTicket.countDocuments(),
+
+      SupportTicket.countDocuments({
+        status: "Open",
+      }),
+
+      ReturnRequest.countDocuments(),
+
+      ReturnRequest.countDocuments({
+        status: "Requested",
+      }),
+
+      SupportTicket.find()
+        .sort({
+          createdAt: -1,
+        })
+        .limit(5),
+
+      ReturnRequest.find()
+        .sort({
+          createdAt: -1,
+        })
+        .limit(5),
+
+    ]);
+
+
+    res.json({
+
+      tickets: {
+
+        total:
+          totalTickets,
+
+        open:
+          openTickets,
+
+        resolved:
+          Math.max(
+            totalTickets -
+              openTickets,
+            0
+          ),
+
+      },
+
+
+      returns: {
+
+        total:
+          totalReturns,
+
+        requested:
+          requestedReturns,
+
+        processed:
+          Math.max(
+            totalReturns -
+              requestedReturns,
+            0
+          ),
+
+      },
+
+
+      attentionRequired:
+        openTickets +
+        requestedReturns,
+
+
+      recentTickets:
+
+
+        recentTickets.map(
+          (ticket) => ({
+
+            ticketId:
+              ticket.ticketId,
+
+            customerId:
+              ticket.customerId,
+
+            orderNumber:
+              ticket.orderNumber,
+
+            issue:
+              ticket.issue,
+
+            priority:
+              ticket.priority,
+
+            status:
+              ticket.status,
+
+            createdAt:
+              ticket.createdAt,
+
+          })
+        ),
+
+
+      recentReturns:
+
+        recentReturns.map(
+          (returnRequest) => ({
+
+            returnId:
+              returnRequest.returnId,
+
+            customerId:
+              returnRequest.customerId,
+
+            orderNumber:
+              returnRequest.orderNumber,
+
+            reason:
+              returnRequest.reason,
+
+            status:
+              returnRequest.status,
+
+            createdAt:
+              returnRequest.createdAt,
+
+          })
+        ),
+
+
+      generatedAt:
+        new Date().toISOString(),
+
+    });
+
+
+  } catch (error) {
+
+    res.status(500).json({
+      message:
+        error.message,
+    });
+
+  }
+
+};
+
+// =====================================
+// Dashboard Summary
+// Real KPI data for admin dashboard
+// =====================================
+export const getDashboardSummary = async (req, res) => {
+
+  try {
+
+    const now =
+      new Date();
+
+
+    const last30DaysStart =
+      new Date(now);
+
+    last30DaysStart.setDate(
+      last30DaysStart.getDate() - 30
+    );
+
+
+    const previous30DaysStart =
+      new Date(now);
+
+    previous30DaysStart.setDate(
+      previous30DaysStart.getDate() - 60
+    );
+
+
+    const [
+      totalRevenueResult,
+      totalOrders,
+      last30DaysRevenueResult,
+      last30DaysOrders,
+      previous30DaysRevenueResult,
+      previous30DaysOrders,
+      uniqueCustomers,
+      inventoryAlerts,
+    ] = await Promise.all([
+
+      Order.aggregate([
+        {
+          $group: {
+            _id: null,
+
+            totalRevenue: {
+              $sum:
+                "$totalAmount",
+            },
+          },
+        },
+      ]),
+
+
+      Order.countDocuments(),
+
+
+      Order.aggregate([
+        {
+          $match: {
+            date: {
+              $gte:
+                last30DaysStart,
+              $lte:
+                now,
+            },
+          },
+        },
+
+        {
+          $group: {
+            _id: null,
+
+            totalRevenue: {
+              $sum:
+                "$totalAmount",
+            },
+          },
+        },
+      ]),
+
+
+      Order.countDocuments({
+        date: {
+          $gte:
+            last30DaysStart,
+          $lte:
+            now,
+        },
+      }),
+
+
+      Order.aggregate([
+        {
+          $match: {
+            date: {
+              $gte:
+                previous30DaysStart,
+              $lt:
+                last30DaysStart,
+            },
+          },
+        },
+
+        {
+          $group: {
+            _id: null,
+
+            totalRevenue: {
+              $sum:
+                "$totalAmount",
+            },
+          },
+        },
+      ]),
+
+
+      Order.countDocuments({
+        date: {
+          $gte:
+            previous30DaysStart,
+          $lt:
+            last30DaysStart,
+        },
+      }),
+
+
+      Order.distinct(
+        "customerId"
+      ),
+
+
+      Inventory.countDocuments({
+        $expr: {
+          $lte: [
+            "$stock",
+            "$lowStockThreshold",
+          ],
+        },
+      }),
+
+    ]);
+
+
+    const totalRevenue =
+      totalRevenueResult[0]
+        ?.totalRevenue || 0;
+
+
+    const last30DaysRevenue =
+      last30DaysRevenueResult[0]
+        ?.totalRevenue || 0;
+
+
+    const previous30DaysRevenue =
+      previous30DaysRevenueResult[0]
+        ?.totalRevenue || 0;
+
+
+    const calculateChange = (
+      current,
+      previous
+    ) => {
+
+      if (
+        previous === 0
+      ) {
+
+        return current > 0
+          ? 100
+          : 0;
+
+      }
+
+
+      return (
+        (
+          (current - previous) /
+          previous
+        ) * 100
+      );
+
+    };
+
+
+    const revenueChange =
+      calculateChange(
+        last30DaysRevenue,
+        previous30DaysRevenue
+      );
+
+
+    const orderChange =
+      calculateChange(
+        last30DaysOrders,
+        previous30DaysOrders
+      );
+
+
+    res.json({
+
+      revenue: {
+
+        total:
+          totalRevenue,
+
+        last30Days:
+          last30DaysRevenue,
+
+        previous30Days:
+          previous30DaysRevenue,
+
+        changePercent:
+          Number(
+            revenueChange.toFixed(1)
+          ),
+
+      },
+
+
+      orders: {
+
+        total:
+          totalOrders,
+
+        last30Days:
+          last30DaysOrders,
+
+        previous30Days:
+          previous30DaysOrders,
+
+        changePercent:
+          Number(
+            orderChange.toFixed(1)
+          ),
+
+      },
+
+
+      customers: {
+
+        unique:
+          uniqueCustomers.length,
+
+      },
+
+
+      inventory: {
+
+        alerts:
+          inventoryAlerts,
+
+      },
+
+
+      generatedAt:
+        new Date().toISOString(),
+
+    });
+
+
+  } catch (error) {
+
+    res.status(500).json({
+      message:
+        error.message,
     });
 
   }

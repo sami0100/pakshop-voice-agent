@@ -9,6 +9,9 @@ import customerRoutes from "../routes/customerRoutes.js";
 import orderRoutes from "../routes/orderRoutes.js";
 import inventoryRoutes from "../routes/inventoryRoutes.js";
 import analyticsRoutes from "../routes/analyticsRoutes.js";
+import supportRoutes from "../routes/supportRoutes.js";
+import returnRoutes from "../routes/returnRoutes.js";
+
 dotenv.config();
 
 
@@ -20,31 +23,52 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 
+
 app.use(cors());
 
 app.use(express.json());
 
 
-// Product APIs  {API SECTIONNN}
+
+// Product APIs
 app.use(
   "/api/v1/products",
   productRoutes
 );
+
+
 app.use(
   "/api/v1/customers",
   customerRoutes
 );
+
+
 app.use(
   "/api/v1/orders",
   orderRoutes
 );
+
+
 app.use(
   "/api/v1/inventory",
   inventoryRoutes
 );
+
+
 app.use(
   "/api/v1/analytics",
   analyticsRoutes
+);
+
+
+app.use(
+  "/api/v1/support",
+  supportRoutes
+);
+
+app.use(
+  "/api/v1/returns",
+  returnRoutes
 );
 
 app.get("/", (req, res) => {

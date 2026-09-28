@@ -19,7 +19,6 @@ function TopCustomers({
 
     <div
       className="
-        h-full
         rounded-[24px]
         border
         border-[#dfe5df]
@@ -59,7 +58,9 @@ function TopCustomers({
               text-[#176247]
             "
           >
-            <Users size={18} />
+            <Users
+              size={18}
+            />
           </div>
 
 
@@ -136,7 +137,7 @@ function TopCustomers({
           <div
             className="
               flex
-              min-h-[260px]
+              min-h-[240px]
               flex-col
               items-center
               justify-center
@@ -151,9 +152,7 @@ function TopCustomers({
 
             <Users
               size={28}
-              className="
-                text-slate-300
-              "
+              className="text-slate-300"
             />
 
             <p
@@ -172,7 +171,10 @@ function TopCustomers({
         ) : (
 
           topCustomers.map(
-            (customer, index) => {
+            (
+              customer,
+              index
+            ) => {
 
               const spending =
                 Number(
@@ -245,7 +247,8 @@ function TopCustomers({
                         rounded-xl
                         font-black
                         ${
-                          index === 0
+                          index ===
+                          0
                             ? "bg-[#163a2c] text-white"
                             : "bg-[#e7f0e9] text-[#176247]"
                         }
@@ -253,13 +256,15 @@ function TopCustomers({
                     >
 
                       {
-                        index === 0
+                        index ===
+                        0
                           ? (
                             <Crown
                               size={17}
                             />
                           )
-                          : index + 1
+                          : index +
+                            1
                       }
 
                     </div>
@@ -324,9 +329,6 @@ function TopCustomers({
                           className="
                             shrink-0
                             text-[#176247]
-                            transition
-                            group-hover:translate-x-0.5
-                            group-hover:-translate-y-0.5
                           "
                         />
 
@@ -373,7 +375,7 @@ function TopCustomers({
                               text-[#17231d]
                             "
                           >
-                            $
+                            PKR{" "}
                             {
                               spending.toLocaleString()
                             }
