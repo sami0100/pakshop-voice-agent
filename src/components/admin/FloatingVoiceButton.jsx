@@ -5,7 +5,7 @@ import {
 import AdminVoiceAssistant from "./AdminVoiceAssistant";
 
 
-function FloatingVoiceButton() {
+function FloatingVoiceButton({ onToolResult }) {
 
   return (
 
@@ -102,7 +102,9 @@ function FloatingVoiceButton() {
             text-[#10251d]
           "
         >
-          <AdminVoiceAssistant />
+          <AdminVoiceAssistant
+            onToolResult={onToolResult}
+          />
         </div>
 
       </div>

@@ -1,5 +1,4 @@
 import Order from "../models/Order.js";
-import Customer from "../models/Customer.js";
 import Inventory from "../models/Inventory.js";
 import SupportTicket from "../models/SupportTicket.js";
 import ReturnRequest from "../models/ReturnRequest.js";
@@ -542,13 +541,104 @@ export const getBusinessOverview = async (req, res) => {
 
 
 
-      Customer.find()
+      Order.aggregate([
 
-        .sort({
-          totalSpent: -1,
-        })
+        {
+          $sort: {
+            date: -1,
+          },
+        },
 
-        .limit(5),
+        {
+          $group: {
+            _id: "$customerId",
+            totalSpent: {
+              $sum: "$totalAmount",
+            },
+            totalOrders: {
+              $sum: 1,
+            },
+            orderCustomerName: {
+              $first: "$customer.fullName",
+            },
+            orderCustomerEmail: {
+              $first: "$customer.email",
+            },
+            orderCustomerCity: {
+              $first: "$delivery.city",
+            },
+          },
+        },
+
+        {
+          $lookup: {
+            from: "customers",
+            localField: "_id",
+            foreignField: "id",
+            as: "customer",
+          },
+        },
+
+        {
+          $unwind: {
+            path: "$customer",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+
+        {
+          $project: {
+            _id: 0,
+            id: "$_id",
+            name: {
+              $ifNull: [
+                "$customer.name",
+                {
+                  $ifNull: [
+                    "$orderCustomerName",
+                    "$_id",
+                  ],
+                },
+              ],
+            },
+            email: {
+              $ifNull: [
+                "$customer.email",
+                {
+                  $ifNull: [
+                    "$orderCustomerEmail",
+                    "",
+                  ],
+                },
+              ],
+            },
+            city: {
+              $ifNull: [
+                "$customer.city",
+                {
+                  $ifNull: [
+                    "$orderCustomerCity",
+                    "",
+                  ],
+                },
+              ],
+            },
+            totalOrders: 1,
+            totalSpent: 1,
+          },
+        },
+
+        {
+          $sort: {
+            totalSpent: -1,
+          },
+        },
+
+        {
+          $limit: 5,
+        },
+
+      ]),
 
 
 

@@ -90,108 +90,138 @@ function AdminDashboard() {
 
 
 
-  useEffect(() => {
+  const loadDashboard = async () => {
 
-    async function loadDashboard() {
+    try {
 
-      try {
+      const results =
+        await Promise.allSettled([
 
-        const results =
-          await Promise.allSettled([
+          getRevenue(),
+          getDashboardSummary(),
+          getTopCustomers(),
+          getLowStockItems(),
+          getSalesTrend(),
+          getTrendingProducts(),
+          getSupportOverview(),
 
-            getRevenue(),
+        ]);
 
-            getDashboardSummary(),
+      const [
+        revenueResult,
+        summaryResult,
+        customerResult,
+        inventoryResult,
+        salesResult,
+        trendingResult,
+        supportResult,
+      ] = results;
 
-            getTopCustomers(),
-
-            getLowStockItems(),
-
-            getSalesTrend(),
-
-            getTrendingProducts(),
-
-            getSupportOverview(),
-
-          ]);
-
-
-        const [
-          revenueResult,
-          summaryResult,
-          customerResult,
-          inventoryResult,
-          salesResult,
-          trendingResult,
-          supportResult,
-        ] = results;
-
-
-        if (revenueResult.status === "fulfilled") {
-          setRevenue(revenueResult.value);
-        } else {
-          console.error("Revenue widget failed:", revenueResult.reason);
-        }
-
-
-        if (summaryResult.status === "fulfilled") {
-          setDashboardSummary(summaryResult.value);
-        } else {
-          console.error("Dashboard summary failed:", summaryResult.reason);
-        }
-
-
-        if (customerResult.status === "fulfilled") {
-          setCustomers(customerResult.value);
-        } else {
-          console.error("Top customers failed:", customerResult.reason);
-        }
-
-
-        if (inventoryResult.status === "fulfilled") {
-          setLowStock(inventoryResult.value);
-        } else {
-          console.error("Inventory widget failed:", inventoryResult.reason);
-        }
-
-
-        if (salesResult.status === "fulfilled") {
-          setSalesTrend(salesResult.value);
-        } else {
-          console.error("Sales trend failed:", salesResult.reason);
-        }
-
-
-        if (trendingResult.status === "fulfilled") {
-          setTrendingProducts(trendingResult.value);
-        } else {
-          console.error("Trending products failed:", trendingResult.reason);
-        }
-
-
-        if (supportResult.status === "fulfilled") {
-          setSupportOverview(supportResult.value);
-        } else {
-          console.error("Support overview failed:", supportResult.reason);
-        }
-
-
-      } catch (error) {
-
-        console.error(
-          "Dashboard error:",
-          error
-        );
-
+      if (revenueResult.status === "fulfilled") {
+        setRevenue(revenueResult.value);
+      } else {
+        console.error("Revenue widget failed:", revenueResult.reason);
       }
+
+      if (summaryResult.status === "fulfilled") {
+        setDashboardSummary(summaryResult.value);
+      } else {
+        console.error("Dashboard summary failed:", summaryResult.reason);
+      }
+
+      if (customerResult.status === "fulfilled") {
+        setCustomers(customerResult.value);
+      } else {
+        console.error("Top customers failed:", customerResult.reason);
+      }
+
+      if (inventoryResult.status === "fulfilled") {
+        setLowStock(inventoryResult.value);
+      } else {
+        console.error("Inventory widget failed:", inventoryResult.reason);
+      }
+
+      if (salesResult.status === "fulfilled") {
+        setSalesTrend(salesResult.value);
+      } else {
+        console.error("Sales trend failed:", salesResult.reason);
+      }
+
+      if (trendingResult.status === "fulfilled") {
+        setTrendingProducts(trendingResult.value);
+      } else {
+        console.error("Trending products failed:", trendingResult.reason);
+      }
+
+      if (supportResult.status === "fulfilled") {
+        setSupportOverview(supportResult.value);
+      } else {
+        console.error("Support overview failed:", supportResult.reason);
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Dashboard error:",
+        error
+      );
 
     }
 
+  };
 
+
+  useEffect(() => {
     loadDashboard();
-
   }, []);
 
+
+  const handleAdminToolResult = async (
+    resultType
+  ) => {
+
+    await loadDashboard();
+
+    const sectionByResult = {
+      revenue:
+        "admin-store-health",
+      "revenue-period":
+        "admin-sales-trend",
+      "top-customers":
+        "admin-top-customers",
+      "trending-products":
+        "admin-trending-products",
+      "sales-trend":
+        "admin-sales-trend",
+      "low-stock":
+        "admin-inventory",
+      "business-overview":
+        "admin-overview",
+      "support-overview":
+        "admin-support",
+    };
+
+    const sectionId =
+      sectionByResult[resultType];
+
+    if (!sectionId) {
+      return;
+    }
+
+    window.requestAnimationFrame(
+      () => {
+        document
+          .getElementById(
+            sectionId
+          )
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+      }
+    );
+
+  };
 
 
   const formatPKR = (
@@ -277,6 +307,7 @@ function AdminDashboard() {
         ================================================== */}
 
         <section
+          id="admin-overview"
           className="
             mt-6
           "
@@ -310,6 +341,7 @@ function AdminDashboard() {
         ================================================== */}
 
         <section
+          id="admin-store-health"
           className="
             mt-6
           "
@@ -586,6 +618,7 @@ function AdminDashboard() {
         ================================================== */}
 
         <section
+          id="admin-support"
           className="
             mt-6
           "
@@ -665,6 +698,7 @@ function AdminDashboard() {
         ================================================== */}
 
         <section
+          id="admin-sales-trend"
           className="
             mt-6
           "
@@ -690,6 +724,7 @@ function AdminDashboard() {
         ================================================== */}
 
         <section
+          id="admin-trending-products"
           className="
             mt-5
           "
@@ -715,6 +750,7 @@ function AdminDashboard() {
         ================================================== */}
 
         <section
+          id="admin-inventory"
           className="
             mt-5
           "
@@ -740,6 +776,7 @@ function AdminDashboard() {
         ================================================== */}
 
         <section
+          id="admin-top-customers"
           className="
             mt-5
           "
@@ -816,7 +853,11 @@ function AdminDashboard() {
         />
 
 
-        <FloatingVoiceButton />
+        <FloatingVoiceButton
+          onToolResult={
+            handleAdminToolResult
+          }
+        />
 
       </main>
 

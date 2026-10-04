@@ -3,250 +3,199 @@ const API_URL =
   "http://localhost:5000/api/v1";
 
 
-export function createAdminTools() {
+export function createAdminTools({
+  onResult,
+} = {}) {
+
+  const runTool = async (
+    path,
+    resultType
+  ) => {
+
+    try {
+
+      const response =
+        await fetch(
+          `${API_URL}${path}`
+        );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          message:
+            data?.message ||
+            "Unable to retrieve live admin data.",
+        };
+      }
+
+      if (
+        typeof onResult ===
+        "function"
+      ) {
+        await onResult(
+          resultType,
+          data
+        );
+      }
+
+      return data;
+
+    } catch (error) {
+
+      console.error(
+        `${resultType} admin tool error:`,
+        error
+      );
+
+      return {
+        success: false,
+        message:
+          "Unable to retrieve live admin data right now.",
+      };
+
+    }
+
+  };
+
 
   return [
 
     {
       type: "function",
-
       name: "get_revenue",
-
       description:
-        "Get total store revenue and order count.",
-
+        "Get total store revenue and order count from live PakShop order data.",
       parameters: {
         type: "object",
         properties: {},
       },
-
-
-      execute: async () => {
-
-        const response = await fetch(
-          `${API_URL}/analytics/revenue`
-        );
-
-
-        return await response.json();
-
-      },
-
+      execute: async () =>
+        runTool(
+          "/analytics/revenue",
+          "revenue"
+        ),
     },
-
 
     {
       type: "function",
-
       name: "get_revenue_by_period",
-
       description:
-        "Get revenue for a specific number of days.",
-
-
+        "Get live revenue and orders for a specific number of days.",
       parameters: {
-
         type: "object",
-
         properties: {
-
           days: {
             type: "number",
             description:
               "Number of days to analyze",
           },
-
         },
-
         required: ["days"],
-
       },
-
-
-      execute: async ({ days }) => {
-
-        const response = await fetch(
-          `${API_URL}/analytics/revenue-period?days=${days}`
-        );
-
-
-        return await response.json();
-
-      },
-
+      execute: async ({ days }) =>
+        runTool(
+          `/analytics/revenue-period?days=${encodeURIComponent(days)}`,
+          "revenue-period"
+        ),
     },
-
 
     {
       type: "function",
-
       name: "get_top_customers",
-
       description:
-        "Get customers with highest spending.",
-
-
+        "Get the current highest-spending customers calculated from live PakShop orders.",
       parameters: {
         type: "object",
         properties: {},
       },
-
-
-      execute: async () => {
-
-        const response = await fetch(
-          `${API_URL}/analytics/top-customers`
-        );
-
-
-        return await response.json();
-
-      },
-
+      execute: async () =>
+        runTool(
+          "/analytics/top-customers",
+          "top-customers"
+        ),
     },
-
 
     {
       type: "function",
-
       name: "get_trending_products",
-
       description:
-        "Get products with highest sales.",
-
-
+        "Get products with the highest live sales activity.",
       parameters: {
         type: "object",
         properties: {},
       },
-
-
-      execute: async () => {
-
-        const response = await fetch(
-          `${API_URL}/analytics/trending-products`
-        );
-
-
-        return await response.json();
-
-      },
-
+      execute: async () =>
+        runTool(
+          "/analytics/trending-products",
+          "trending-products"
+        ),
     },
-
 
     {
       type: "function",
-
       name: "get_sales_trend",
-
       description:
-        "Get daily sales trend.",
-
-
+        "Get the current daily sales trend from live order data.",
       parameters: {
         type: "object",
         properties: {},
       },
-
-
-      execute: async () => {
-
-        const response = await fetch(
-          `${API_URL}/analytics/sales-trend`
-        );
-
-
-        return await response.json();
-
-      },
-
+      execute: async () =>
+        runTool(
+          "/analytics/sales-trend",
+          "sales-trend"
+        ),
     },
-
 
     {
       type: "function",
-
       name: "get_low_stock_items",
-
       description:
-        "Get products that have low inventory and require restocking.",
-
-
+        "Get current products that have low inventory and require restocking.",
       parameters: {
         type: "object",
         properties: {},
       },
-
-
-      execute: async () => {
-
-        const response = await fetch(
-          `${API_URL}/inventory/low-stock`
-        );
-
-
-        return await response.json();
-
-      },
-
+      execute: async () =>
+        runTool(
+          "/inventory/low-stock",
+          "low-stock"
+        ),
     },
-
 
     {
       type: "function",
-
       name: "get_business_overview",
-
       description:
-        "Get a complete executive overview of PakShop including total revenue, total orders, average order value, top customers, trending products, and low-stock inventory risks. Use this when the admin asks for a store summary, business overview, overall performance, how the store is doing, what needs attention, or a general business health report.",
-
+        "Get a live executive overview of PakShop including revenue, orders, average order value, current top customers calculated from orders, trending products, and low-stock inventory risks. Use this for a store summary or general business-health question.",
       parameters: {
         type: "object",
         properties: {},
       },
-
-
-      execute: async () => {
-
-        const response = await fetch(
-          `${API_URL}/analytics/business-overview`
-        );
-
-
-        return await response.json();
-
-      },
-
+      execute: async () =>
+        runTool(
+          "/analytics/business-overview",
+          "business-overview"
+        ),
     },
-
 
     {
       type: "function",
-
       name: "get_support_overview",
-
       description:
-        "Get customer service analytics including total support tickets, open tickets, resolved tickets, total return requests, pending return requests, processed returns, items requiring attention, recent support tickets, and recent return requests. Use this when the admin asks about customer complaints, support workload, unresolved issues, pending returns, customer service health, or support activity.",
-
-
+        "Get live customer-service analytics including support tickets, open issues, return requests, pending returns, and recent support activity.",
       parameters: {
         type: "object",
         properties: {},
       },
-
-
-      execute: async () => {
-
-        const response = await fetch(
-          `${API_URL}/analytics/support-overview`
-        );
-
-
-        return await response.json();
-
-      },
-
+      execute: async () =>
+        runTool(
+          "/analytics/support-overview",
+          "support-overview"
+        ),
     },
 
   ];

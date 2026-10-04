@@ -9,7 +9,13 @@ const API_URL =
 
 
 
-export function createSupportTools() {
+export function createSupportTools({
+  setIsSupportOpen,
+  setIsSupportFormOpen,
+  setIsReturnFormOpen,
+  loadSupportTickets,
+  loadReturnRequests,
+} = {}) {
 
 
   const trackOrder = {
@@ -343,6 +349,19 @@ export function createSupportTools() {
           await response.json();
 
 
+        if (typeof loadSupportTickets === "function") {
+          await loadSupportTickets();
+        }
+
+        if (typeof setIsSupportFormOpen === "function") {
+          setIsSupportFormOpen(false);
+        }
+
+        if (typeof setIsSupportOpen === "function") {
+          setIsSupportOpen(true);
+        }
+
+
         return {
 
           success: true,
@@ -357,6 +376,9 @@ export function createSupportTools() {
               ticket.status,
 
           },
+
+          message:
+            `Support ticket ${ticket.ticketId} was created and the Support Center is now open.`,
 
         };
 
@@ -569,6 +591,19 @@ export function createSupportTools() {
           await response.json();
 
 
+        if (typeof loadReturnRequests === "function") {
+          await loadReturnRequests();
+        }
+
+        if (typeof setIsReturnFormOpen === "function") {
+          setIsReturnFormOpen(false);
+        }
+
+        if (typeof setIsSupportOpen === "function") {
+          setIsSupportOpen(true);
+        }
+
+
         return {
 
           success: true,
@@ -576,7 +611,7 @@ export function createSupportTools() {
           returnRequest,
 
           message:
-            "Return request created successfully.",
+            `Return request ${returnRequest.returnId} was created and the Support Center is now open.`,
 
         };
 

@@ -2920,7 +2920,13 @@ const closeProductDetails = () => {
     submitOrder,
   });
 
-  const supportTools = createSupportTools();
+  const supportTools = createSupportTools({
+    setIsSupportOpen,
+    setIsSupportFormOpen,
+    setIsReturnFormOpen,
+    loadSupportTickets,
+    loadReturnRequests,
+  });
 
 const allCustomerTools = [
   ...customerTools,

@@ -11,10 +11,13 @@ import {
 } from "../../agents/adminAgent/context";
 
 
-function AdminVoiceAssistant() {
+function AdminVoiceAssistant({ onToolResult }) {
 
   const adminTools =
-    createAdminTools();
+    createAdminTools({
+      onResult:
+        onToolResult,
+    });
 
 
   return (
