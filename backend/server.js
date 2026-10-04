@@ -35,7 +35,21 @@ connectDB();
 
 app.use(
   cors({
-    origin: true,
+    origin: [
+      "https://pakshop-voice-agent.vercel.app",
+    ],
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS",
+    ],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+    ],
     credentials: true,
   })
 );
