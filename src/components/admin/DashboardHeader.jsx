@@ -64,10 +64,10 @@ function DashboardHeader() {
 
 
         const [
-          summaryData,
-          inventoryData,
-          supportData,
-        ] = await Promise.all([
+          summaryResult,
+          inventoryResult,
+          supportResult,
+        ] = await Promise.allSettled([
 
           getDashboardSummary(),
 
@@ -78,21 +78,29 @@ function DashboardHeader() {
         ]);
 
 
-        setDashboardSummary(
-          summaryData
-        );
+        if (summaryResult.status === "fulfilled") {
+          setDashboardSummary(summaryResult.value);
+        } else {
+          console.error("Header summary failed:", summaryResult.reason);
+        }
 
-        setInventoryAlerts(
-          Array.isArray(
-            inventoryData
-          )
-            ? inventoryData
-            : []
-        );
 
-        setSupportOverview(
-          supportData
-        );
+        if (inventoryResult.status === "fulfilled") {
+          setInventoryAlerts(
+            Array.isArray(inventoryResult.value)
+              ? inventoryResult.value
+              : []
+          );
+        } else {
+          console.error("Header inventory failed:", inventoryResult.reason);
+        }
+
+
+        if (supportResult.status === "fulfilled") {
+          setSupportOverview(supportResult.value);
+        } else {
+          console.error("Header support failed:", supportResult.reason);
+        }
 
 
       } catch (error) {

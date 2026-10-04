@@ -96,60 +96,84 @@ function AdminDashboard() {
 
       try {
 
+        const results =
+          await Promise.allSettled([
+
+            getRevenue(),
+
+            getDashboardSummary(),
+
+            getTopCustomers(),
+
+            getLowStockItems(),
+
+            getSalesTrend(),
+
+            getTrendingProducts(),
+
+            getSupportOverview(),
+
+          ]);
+
+
         const [
-          revenueData,
-          summaryData,
-          customerData,
-          inventoryData,
-          salesData,
-          trendingData,
-          supportData,
-        ] = await Promise.all([
-
-          getRevenue(),
-
-          getDashboardSummary(),
-
-          getTopCustomers(),
-
-          getLowStockItems(),
-
-          getSalesTrend(),
-
-          getTrendingProducts(),
-
-          getSupportOverview(),
-
-        ]);
+          revenueResult,
+          summaryResult,
+          customerResult,
+          inventoryResult,
+          salesResult,
+          trendingResult,
+          supportResult,
+        ] = results;
 
 
-        setRevenue(
-          revenueData
-        );
+        if (revenueResult.status === "fulfilled") {
+          setRevenue(revenueResult.value);
+        } else {
+          console.error("Revenue widget failed:", revenueResult.reason);
+        }
 
-        setDashboardSummary(
-          summaryData
-        );
 
-        setCustomers(
-          customerData
-        );
+        if (summaryResult.status === "fulfilled") {
+          setDashboardSummary(summaryResult.value);
+        } else {
+          console.error("Dashboard summary failed:", summaryResult.reason);
+        }
 
-        setLowStock(
-          inventoryData
-        );
 
-        setSalesTrend(
-          salesData
-        );
+        if (customerResult.status === "fulfilled") {
+          setCustomers(customerResult.value);
+        } else {
+          console.error("Top customers failed:", customerResult.reason);
+        }
 
-        setTrendingProducts(
-          trendingData
-        );
 
-        setSupportOverview(
-          supportData
-        );
+        if (inventoryResult.status === "fulfilled") {
+          setLowStock(inventoryResult.value);
+        } else {
+          console.error("Inventory widget failed:", inventoryResult.reason);
+        }
+
+
+        if (salesResult.status === "fulfilled") {
+          setSalesTrend(salesResult.value);
+        } else {
+          console.error("Sales trend failed:", salesResult.reason);
+        }
+
+
+        if (trendingResult.status === "fulfilled") {
+          setTrendingProducts(trendingResult.value);
+        } else {
+          console.error("Trending products failed:", trendingResult.reason);
+        }
+
+
+        if (supportResult.status === "fulfilled") {
+          setSupportOverview(supportResult.value);
+        } else {
+          console.error("Support overview failed:", supportResult.reason);
+        }
 
 
       } catch (error) {

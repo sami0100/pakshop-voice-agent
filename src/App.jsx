@@ -2718,38 +2718,54 @@ const closeProductDetails = () => {
 
    try {
 
-     await fetch(
-       `${import.meta.env.VITE_API_URL}/orders`,
-       {
-         method: "POST",
+     const response =
+       await fetch(
+         `${import.meta.env.VITE_API_URL}/orders`,
+         {
+           method: "POST",
 
-         headers: {
-           "Content-Type": "application/json",
-         },
+           headers: {
+             "Content-Type": "application/json",
+           },
 
-         body: JSON.stringify({
-  ...order,
+           body: JSON.stringify({
+             ...order,
 
-  orderNumber:
-    order.orderNumber,
+             orderNumber:
+               order.orderNumber,
 
-  customerId:
-    getCustomerId(),
+             customerId:
+               getCustomerId(),
 
-  customer:
-    order.customer,
+             customer:
+               order.customer,
 
-  delivery:
-    order.delivery,
+             delivery:
+               order.delivery,
 
-  trackingStatus:
-    order.trackingStatus,
+             trackingStatus:
+               order.trackingStatus,
 
-  trackingHistory:
-    order.trackingHistory,
-}),
-       }
-     );
+             trackingHistory:
+               order.trackingHistory,
+           }),
+         }
+       );
+
+
+     if (!response.ok) {
+
+       const errorBody =
+         await response
+           .json()
+           .catch(() => ({}));
+
+       throw new Error(
+         errorBody.message ||
+           `Order API failed with status ${response.status}.`
+       );
+
+     }
 
 
    } catch (error) {
@@ -2758,6 +2774,13 @@ const closeProductDetails = () => {
        "Failed to save order to database:",
        error
      );
+
+     return {
+       success: false,
+       message:
+         error.message ||
+         "Unable to save the order. Please try again.",
+     };
 
    }
 

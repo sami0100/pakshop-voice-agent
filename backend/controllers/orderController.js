@@ -90,82 +90,149 @@ export const createOrder = async (req, res) => {
 
   try {
 
+    const {
+      orderNumber,
+      customerId,
+      customer,
+      placedAt,
+      status,
+      trackingStatus,
+      trackingHistory,
+      delivery,
+      items,
+      total,
+      paymentMethod,
+    } = req.body || {};
+
+
+    if (!orderNumber) {
+      return res.status(400).json({
+        message: "orderNumber is required.",
+      });
+    }
+
+
+    if (!customerId) {
+      return res.status(400).json({
+        message: "customerId is required.",
+      });
+    }
+
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({
+        message: "Order items are required.",
+      });
+    }
+
+
+    if (!Number.isFinite(Number(total))) {
+      return res.status(400).json({
+        message: "A valid order total is required.",
+      });
+    }
+
+
     const order = new Order({
 
       id:
-        req.body.orderNumber,
+        orderNumber,
 
 
-      orderNumber:
-        req.body.orderNumber,
+      orderNumber,
 
 
-      customerId:
-        req.body.customerId,
+      customerId,
 
 
-      customer:
-        req.body.customer,
+      customer,
 
 
       date:
-        req.body.placedAt
-          ? new Date(req.body.placedAt)
+        placedAt
+          ? new Date(placedAt)
           : new Date(),
 
 
       status:
-        req.body.status || "Processing",
+        status || "Processing",
 
 
-      trackingStatus:
-        req.body.trackingStatus,
+      trackingStatus,
 
 
       trackingHistory:
-        req.body.trackingHistory || [],
+        Array.isArray(trackingHistory)
+          ? trackingHistory
+          : [],
 
 
-      delivery:
-        req.body.delivery,
+      delivery,
 
 
       items:
-        req.body.items.map((item) => ({
+        items.map((item) => ({
 
           productId:
-            String(item.id),
+            String(item.id ?? item.productId ?? ""),
 
           quantity:
-            item.quantity,
+            Number(item.quantity),
 
           price:
-            item.price,
+            Number(item.price),
 
         })),
 
 
       totalAmount:
-        req.body.total,
+        Number(total),
 
 
-      paymentMethod:
-        req.body.paymentMethod,
+      paymentMethod,
 
     });
 
+
+    const invalidItem =
+      order.items.find(
+        (item) =>
+          !item.productId ||
+          !Number.isFinite(item.quantity) ||
+          item.quantity <= 0 ||
+          !Number.isFinite(item.price)
+      );
+
+
+    if (invalidItem) {
+      return res.status(400).json({
+        message: "One or more order items are invalid.",
+      });
+    }
 
 
     const savedOrder =
       await order.save();
 
 
-
     res.status(201).json(savedOrder);
 
 
-
   } catch (error) {
+
+    console.error(
+      "createOrder error:",
+      error
+    );
+
+
+    if (error?.code === 11000) {
+      return res.status(409).json({
+        message:
+          "An order with this order number already exists.",
+      });
+    }
+
 
     res.status(500).json({
       message: error.message,

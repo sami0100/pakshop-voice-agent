@@ -1,121 +1,77 @@
-const API_URL =
-  import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
-
-export async function getRevenue() {
-
-  const response = await fetch(
-    `${API_URL}/analytics/revenue`
+if (!API_URL) {
+  console.error(
+    "VITE_API_URL is not configured. Admin dashboard API calls will fail."
   );
-
-  if (!response.ok) {
-    throw new Error(
-      "Failed to load revenue."
-    );
-  }
-
-  return await response.json();
-
 }
 
+async function getJson(path, label) {
+  if (!API_URL) {
+    throw new Error("VITE_API_URL is not configured.");
+  }
 
-export async function getDashboardSummary() {
-
-  const response = await fetch(
-    `${API_URL}/analytics/dashboard-summary`
-  );
+  const response = await fetch(`${API_URL}${path}`);
 
   if (!response.ok) {
+    const body = await response
+      .json()
+      .catch(() => ({}));
+
     throw new Error(
-      "Failed to load dashboard summary."
+      body.message ||
+        `${label} failed with status ${response.status}.`
     );
   }
 
-  return await response.json();
-
+  return response.json();
 }
 
-
-export async function getTopCustomers() {
-
-  const response = await fetch(
-    `${API_URL}/analytics/top-customers`
+export function getRevenue() {
+  return getJson(
+    "/analytics/revenue",
+    "Revenue request"
   );
-
-  if (!response.ok) {
-    throw new Error(
-      "Failed to load top customers."
-    );
-  }
-
-  return await response.json();
-
 }
 
-
-export async function getTrendingProducts() {
-
-  const response = await fetch(
-    `${API_URL}/analytics/trending-products`
+export function getDashboardSummary() {
+  return getJson(
+    "/analytics/dashboard-summary",
+    "Dashboard summary request"
   );
-
-  if (!response.ok) {
-    throw new Error(
-      "Failed to load trending products."
-    );
-  }
-
-  return await response.json();
-
 }
 
-
-export async function getSalesTrend() {
-
-  const response = await fetch(
-    `${API_URL}/analytics/sales-trend`
+export function getTopCustomers() {
+  return getJson(
+    "/analytics/top-customers",
+    "Top customers request"
   );
-
-  if (!response.ok) {
-    throw new Error(
-      "Failed to load sales trend."
-    );
-  }
-
-  return await response.json();
-
 }
 
-
-export async function getLowStockItems() {
-
-  const response = await fetch(
-    `${API_URL}/inventory/low-stock`
+export function getTrendingProducts() {
+  return getJson(
+    "/analytics/trending-products",
+    "Trending products request"
   );
-
-  if (!response.ok) {
-    throw new Error(
-      "Failed to load low-stock inventory."
-    );
-  }
-
-  return await response.json();
-
 }
 
-
-export async function getSupportOverview() {
-
-  const response = await fetch(
-    `${API_URL}/analytics/support-overview`
+export function getSalesTrend() {
+  return getJson(
+    "/analytics/sales-trend",
+    "Sales trend request"
   );
+}
 
-  if (!response.ok) {
-    throw new Error(
-      "Failed to load customer service analytics."
-    );
-  }
+export function getLowStockItems() {
+  return getJson(
+    "/inventory/low-stock",
+    "Low-stock inventory request"
+  );
+}
 
-  return await response.json();
-
+export function getSupportOverview() {
+  return getJson(
+    "/analytics/support-overview",
+    "Customer service analytics request"
+  );
 }
