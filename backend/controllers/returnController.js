@@ -67,6 +67,8 @@ export const getCustomerReturns = async (req, res) => {
       await ReturnRequest.find({
         customerId:
           req.params.customerId,
+      }).sort({
+        createdAt: -1,
       });
 
 

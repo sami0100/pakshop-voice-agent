@@ -66,6 +66,8 @@ export const getCustomerTickets = async (req, res) => {
       await SupportTicket.find({
         customerId:
           req.params.customerId,
+      }).sort({
+        createdAt: -1,
       });
 
 

@@ -341,6 +341,18 @@ export const getTrendingProducts = async (req, res) => {
 
     const products = await Order.aggregate([
 
+      // Only include orders created through the live storefront.
+      // Seed/demo orders do not have an orderNumber and should not
+      // decide what is trending for current customers.
+      {
+        $match: {
+          orderNumber: {
+            $exists: true,
+            $nin: [null, ""],
+          },
+        },
+      },
+
       {
         $unwind: "$items",
       },
@@ -643,6 +655,15 @@ export const getBusinessOverview = async (req, res) => {
 
 
       Order.aggregate([
+
+        {
+          $match: {
+            orderNumber: {
+              $exists: true,
+              $nin: [null, ""],
+            },
+          },
+        },
 
         {
           $unwind: "$items",

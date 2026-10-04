@@ -121,7 +121,7 @@ function TrendingProducts({
           text-slate-500
         "
       >
-        Products generating the strongest sales activity and revenue.
+        Products ranked from live customer purchases by units sold and revenue.
       </p>
 
 

@@ -66,6 +66,9 @@ export const getCustomerOrders = async (req, res) => {
 
     const orders = await Order.find({
       customerId: req.params.customerId,
+    }).sort({
+      date: -1,
+      createdAt: -1,
     });
 
 
@@ -90,149 +93,82 @@ export const createOrder = async (req, res) => {
 
   try {
 
-    const {
-      orderNumber,
-      customerId,
-      customer,
-      placedAt,
-      status,
-      trackingStatus,
-      trackingHistory,
-      delivery,
-      items,
-      total,
-      paymentMethod,
-    } = req.body || {};
-
-
-    if (!orderNumber) {
-      return res.status(400).json({
-        message: "orderNumber is required.",
-      });
-    }
-
-
-    if (!customerId) {
-      return res.status(400).json({
-        message: "customerId is required.",
-      });
-    }
-
-
-    if (!Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({
-        message: "Order items are required.",
-      });
-    }
-
-
-    if (!Number.isFinite(Number(total))) {
-      return res.status(400).json({
-        message: "A valid order total is required.",
-      });
-    }
-
-
     const order = new Order({
 
       id:
-        orderNumber,
+        req.body.orderNumber,
 
 
-      orderNumber,
+      orderNumber:
+        req.body.orderNumber,
 
 
-      customerId,
+      customerId:
+        req.body.customerId,
 
 
-      customer,
+      customer:
+        req.body.customer,
 
 
       date:
-        placedAt
-          ? new Date(placedAt)
+        req.body.placedAt
+          ? new Date(req.body.placedAt)
           : new Date(),
 
 
       status:
-        status || "Processing",
+        req.body.status || "Processing",
 
 
-      trackingStatus,
+      trackingStatus:
+        req.body.trackingStatus,
 
 
       trackingHistory:
-        Array.isArray(trackingHistory)
-          ? trackingHistory
-          : [],
+        req.body.trackingHistory || [],
 
 
-      delivery,
+      delivery:
+        req.body.delivery,
 
 
       items:
-        items.map((item) => ({
+        req.body.items.map((item) => ({
 
           productId:
-            String(item.id ?? item.productId ?? ""),
+            String(item.id),
 
           quantity:
-            Number(item.quantity),
+            item.quantity,
 
           price:
-            Number(item.price),
+            item.price,
 
         })),
 
 
       totalAmount:
-        Number(total),
+        req.body.total,
 
 
-      paymentMethod,
+      paymentMethod:
+        req.body.paymentMethod,
 
     });
 
-
-    const invalidItem =
-      order.items.find(
-        (item) =>
-          !item.productId ||
-          !Number.isFinite(item.quantity) ||
-          item.quantity <= 0 ||
-          !Number.isFinite(item.price)
-      );
-
-
-    if (invalidItem) {
-      return res.status(400).json({
-        message: "One or more order items are invalid.",
-      });
-    }
 
 
     const savedOrder =
       await order.save();
 
 
+
     res.status(201).json(savedOrder);
 
 
+
   } catch (error) {
-
-    console.error(
-      "createOrder error:",
-      error
-    );
-
-
-    if (error?.code === 11000) {
-      return res.status(409).json({
-        message:
-          "An order with this order number already exists.",
-      });
-    }
-
 
     res.status(500).json({
       message: error.message,
