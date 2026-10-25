@@ -24,6 +24,7 @@ export function createCustomerTools({
   setSelectedCategory,
   setSearchTerm,
   setSortOption,
+  setPriceRange,
   setIsMobileMenuOpen,
   setSelectedProduct,
   setSelectedOrder,
@@ -170,6 +171,11 @@ export function createCustomerTools({
         };
       }
 
+      setPriceRange({
+        min: null,
+        max: null,
+      });
+
       navigateToCategory(
         requestedCategory
       );
@@ -278,6 +284,10 @@ export function createCustomerTools({
 
       setSelectedCategory("All");
       setSearchTerm(query);
+      setPriceRange({
+        min: null,
+        max: null,
+      });
       setSortOption("featured");
       setIsMobileMenuOpen(false);
       setSelectedProduct(null);
@@ -341,6 +351,215 @@ export function createCustomerTools({
       };
     },
   };
+  const filterByPriceTool = {
+    type: "function",
+
+    name: "filter_by_price",
+
+    description:
+      "Numerically filters the visible PakShop storefront by price or budget. Use this whenever the customer asks for products under, below, cheaper than, over, above, more expensive than, or between specific PKR amounts. Also use it for combined requests such as gaming products under 10000 or shoes between 5000 and 15000. Do not use search_products for numeric budget constraints.",
+
+    parameters: {
+      type: "object",
+
+      properties: {
+        minPrice: {
+          type: "number",
+          description:
+            "Optional minimum product price in PKR, inclusive.",
+        },
+
+        maxPrice: {
+          type: "number",
+          description:
+            "Optional maximum product price in PKR, inclusive.",
+        },
+
+        query: {
+          type: "string",
+          description:
+            "Optional product keyword such as shoes, headphones, skincare, or laptop backpack.",
+        },
+
+        category: {
+          type: "string",
+          enum: [
+            "All",
+            "Fashion",
+            "Electronics",
+            "Home",
+            "Beauty",
+            "Gaming",
+            "Sports & Fitness",
+            "Books",
+            "Accessories",
+          ],
+          description:
+            "Optional PakShop category to combine with the price range.",
+        },
+      },
+    },
+
+    execute: async (args) => {
+      const rawMin =
+        args.minPrice === undefined ||
+        args.minPrice === null
+          ? null
+          : Number(args.minPrice);
+
+      const rawMax =
+        args.maxPrice === undefined ||
+        args.maxPrice === null
+          ? null
+          : Number(args.maxPrice);
+
+      const minPrice =
+        rawMin !== null &&
+        Number.isFinite(rawMin)
+          ? Math.max(0, rawMin)
+          : null;
+
+      const maxPrice =
+        rawMax !== null &&
+        Number.isFinite(rawMax)
+          ? Math.max(0, rawMax)
+          : null;
+
+      if (
+        minPrice === null &&
+        maxPrice === null
+      ) {
+        return {
+          success: false,
+          message:
+            "Please provide a minimum price, maximum price, or both.",
+        };
+      }
+
+      if (
+        minPrice !== null &&
+        maxPrice !== null &&
+        minPrice > maxPrice
+      ) {
+        return {
+          success: false,
+          message:
+            "The minimum price cannot be greater than the maximum price.",
+        };
+      }
+
+      const query = String(
+        args.query || ""
+      ).trim();
+
+      const allowedCategories = [
+        "All",
+        "Fashion",
+        "Electronics",
+        "Home",
+        "Beauty",
+        "Gaming",
+        "Sports & Fitness",
+        "Books",
+        "Accessories",
+      ];
+
+      const requestedCategory =
+        allowedCategories.find(
+          (category) =>
+            category.toLowerCase() ===
+            String(
+              args.category || "All"
+            )
+              .trim()
+              .toLowerCase()
+        ) || "All";
+
+      const matchingProducts =
+        products.filter((product) => {
+          const price =
+            Number(product.price);
+
+          const matchesMin =
+            minPrice === null ||
+            price >= minPrice;
+
+          const matchesMax =
+            maxPrice === null ||
+            price <= maxPrice;
+
+          const matchesCategory =
+            requestedCategory === "All" ||
+            product.category ===
+              requestedCategory;
+
+          const matchesQuery =
+            !query ||
+            productMatchesSearchQuery(
+              product,
+              query
+            );
+
+          return (
+            matchesMin &&
+            matchesMax &&
+            matchesCategory &&
+            matchesQuery
+          );
+        });
+
+      setSearchTerm(query);
+      setSelectedCategory(
+        requestedCategory
+      );
+      setPriceRange({
+        min: minPrice,
+        max: maxPrice,
+      });
+      setSortOption("price-low");
+      setIsMobileMenuOpen(false);
+      setSelectedProduct(null);
+      setIsCartOpen(false);
+      setIsWishlistOpen(false);
+      setIsCheckoutOpen(false);
+      setIsOrdersOpen(false);
+
+      scrollToProducts();
+
+      const rangeDescription =
+        minPrice !== null &&
+        maxPrice !== null
+          ? `between PKR ${minPrice.toLocaleString()} and PKR ${maxPrice.toLocaleString()}`
+          : maxPrice !== null
+            ? `at or under PKR ${maxPrice.toLocaleString()}`
+            : `at or above PKR ${minPrice.toLocaleString()}`;
+
+      return {
+        success: true,
+        minPrice,
+        maxPrice,
+        query: query || null,
+        category: requestedCategory,
+        productCount:
+          matchingProducts.length,
+        products:
+          matchingProducts.map(
+            (product) => ({
+              id: String(product.id),
+              name: product.name,
+              price: product.price,
+              category:
+                product.category,
+            })
+          ),
+        message:
+          matchingProducts.length === 0
+            ? `No PakShop products were found ${rangeDescription}${query ? ` matching "${query}"` : ""}.`
+            : `Showing ${matchingProducts.length} PakShop product${matchingProducts.length === 1 ? "" : "s"} ${rangeDescription}${query ? ` matching "${query}"` : ""}.`,
+      };
+    },
+  };
+
     const addToCartTool = {
     type: "function",
 
@@ -1245,6 +1464,7 @@ export function createCustomerTools({
     goToHomeTool,
     filterByCategoryTool,
     searchProductsTool,
+    filterByPriceTool,
     addToCartTool,
     removeFromCartTool,
     openCartTool,
