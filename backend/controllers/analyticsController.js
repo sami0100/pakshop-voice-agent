@@ -420,7 +420,10 @@ export const getTrendingProducts = async (req, res) => {
       },
 
       {
-        $unwind: "$product",
+        $unwind: {
+          path: "$product",
+          preserveNullAndEmptyArrays: true,
+        },
       },
 
       {

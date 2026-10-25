@@ -1,3 +1,5 @@
+import { products as storefrontProducts } from "../../products";
+
 const API_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:5000/api/v1";
@@ -6,6 +8,50 @@ const API_URL =
 export function createAdminTools({
   onResult,
 } = {}) {
+
+  const enrichTrendingProducts = (items = []) =>
+    items.map((item) => {
+      const storefrontProduct = storefrontProducts.find(
+        (product) =>
+          String(product.id) === String(item.productId)
+      );
+
+      return {
+        ...item,
+        name:
+          item.name ||
+          storefrontProduct?.name ||
+          `Product ${item.productId}`,
+        category:
+          item.category ||
+          storefrontProduct?.category ||
+          "",
+        image:
+          item.image ||
+          storefrontProduct?.image ||
+          "",
+      };
+    });
+
+  const normalizeResult = (resultType, data) => {
+    if (resultType === "trending-products" && Array.isArray(data)) {
+      return enrichTrendingProducts(data);
+    }
+
+    if (resultType === "business-overview" && data) {
+      const trendingProducts = enrichTrendingProducts(
+        data.trendingProducts || []
+      );
+
+      return {
+        ...data,
+        trendingProducts,
+        topProduct: trendingProducts[0] || data.topProduct || null,
+      };
+    }
+
+    return data;
+  };
 
   const runTool = async (
     path,
@@ -31,17 +77,23 @@ export function createAdminTools({
         };
       }
 
+      const normalizedData =
+        normalizeResult(
+          resultType,
+          data
+        );
+
       if (
         typeof onResult ===
         "function"
       ) {
         await onResult(
           resultType,
-          data
+          normalizedData
         );
       }
 
-      return data;
+      return normalizedData;
 
     } catch (error) {
 
@@ -106,7 +158,23 @@ export function createAdminTools({
       type: "function",
       name: "get_top_customers",
       description:
-        "Get the current highest-spending customers calculated from live PakShop orders.",
+        "Get the current highest-spending customers calculated from live PakShop orders. Use this for top customers, most valuable customers, highest-value customer, biggest spender, or customer ranking questions.",
+      parameters: {
+        type: "object",
+        properties: {},
+      },
+      execute: async () =>
+        runTool(
+          "/analytics/top-customers",
+          "top-customers"
+        ),
+    },
+
+    {
+      type: "function",
+      name: "get_highest_value_customer",
+      description:
+        "Get the highest-value customer from live PakShop orders. Use this specifically for questions such as who is the highest-value customer, most valuable customer, biggest spender, or number one customer.",
       parameters: {
         type: "object",
         properties: {},
@@ -123,6 +191,22 @@ export function createAdminTools({
       name: "get_trending_products",
       description:
         "Get products with the highest live sales activity.",
+      parameters: {
+        type: "object",
+        properties: {},
+      },
+      execute: async () =>
+        runTool(
+          "/analytics/trending-products",
+          "trending-products"
+        ),
+    },
+
+    {
+      type: "function",
+      name: "get_top_products",
+      description:
+        "Get the current top-selling products from live customer purchases. Use this specifically for questions asking for the top products, top five products, best-selling products, or highest-selling items.",
       parameters: {
         type: "object",
         properties: {},
@@ -170,7 +254,7 @@ export function createAdminTools({
       type: "function",
       name: "get_business_overview",
       description:
-        "Get a live executive overview of PakShop including revenue, orders, average order value, current top customers calculated from orders, trending products, and low-stock inventory risks. Use this for a store summary or general business-health question.",
+        "Get a live executive overview of PakShop including revenue, orders, average order value, current top customers calculated from orders, trending products, and low-stock inventory risks. Use this only for broad store-summary or general business-health questions. Do not use it for focused top-customer or top-product ranking questions when a dedicated tool is available.",
       parameters: {
         type: "object",
         properties: {},

@@ -208,17 +208,23 @@ function AdminDashboard() {
       return;
     }
 
-    window.requestAnimationFrame(
+    window.setTimeout(
       () => {
-        document
-          .getElementById(
+        const section =
+          document.getElementById(
             sectionId
-          )
-          ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-      }
+          );
+
+        if (!section) {
+          return;
+        }
+
+        section.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      },
+      120
     );
 
   };

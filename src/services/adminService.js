@@ -1,9 +1,36 @@
+import { products as storefrontProducts } from "../products";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 if (!API_URL) {
   console.error(
     "VITE_API_URL is not configured. Admin dashboard API calls will fail."
   );
+}
+
+
+function enrichTrendingProducts(items = []) {
+  return items.map((item) => {
+    const storefrontProduct = storefrontProducts.find(
+      (product) => String(product.id) === String(item.productId)
+    );
+
+    return {
+      ...item,
+      name:
+        item.name ||
+        storefrontProduct?.name ||
+        `Product ${item.productId}`,
+      category:
+        item.category ||
+        storefrontProduct?.category ||
+        "",
+      image:
+        item.image ||
+        storefrontProduct?.image ||
+        "",
+    };
+  });
 }
 
 async function getJson(path, label) {
@@ -48,11 +75,13 @@ export function getTopCustomers() {
   );
 }
 
-export function getTrendingProducts() {
-  return getJson(
+export async function getTrendingProducts() {
+  const items = await getJson(
     "/analytics/trending-products",
     "Trending products request"
   );
+
+  return enrichTrendingProducts(items);
 }
 
 export function getSalesTrend() {

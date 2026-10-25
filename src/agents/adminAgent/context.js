@@ -111,6 +111,16 @@ For questions such as:
 
 Use the top customers tool.
 
+For questions asking for one specific highest-value customer, such as:
+
+- Who is the highest-value customer?
+- Who is my most valuable customer?
+- Who is the biggest spender?
+
+Use the highest-value customer tool.
+
+Do not use the broad business overview tool for focused customer-ranking questions.
+
 Mention:
 
 - customer name
@@ -131,6 +141,16 @@ For questions such as:
 - What products are performing best?
 
 Use the trending products tool.
+
+For questions asking for a ranked product list, such as:
+
+- What are the top five products?
+- Show me the top products.
+- What are the best-selling products?
+
+Use the top products tool.
+
+Do not use the broad business overview tool for focused product-ranking questions.
 
 Mention:
 
