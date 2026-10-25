@@ -3,6 +3,16 @@ import Inventory from "../models/Inventory.js";
 import SupportTicket from "../models/SupportTicket.js";
 import ReturnRequest from "../models/ReturnRequest.js";
 
+// Orders created through the live storefront always have an orderNumber.
+// Seed/demo orders use only the legacy `id` field. Keeping this filter in
+// one place makes every sales/customer KPI use the same data source.
+const LIVE_ORDER_FILTER = {
+  orderNumber: {
+    $exists: true,
+    $nin: [null, ""],
+  },
+};
+
 
 // =====================================
 // Total Revenue
@@ -12,6 +22,10 @@ export const getRevenue = async (req, res) => {
   try {
 
     const result = await Order.aggregate([
+
+      {
+        $match: LIVE_ORDER_FILTER,
+      },
 
       {
         $group: {
@@ -77,6 +91,8 @@ export const getRevenueByPeriod = async (req, res) => {
       {
         $match: {
 
+          ...LIVE_ORDER_FILTER,
+
           date: {
             $gte: startDate,
           },
@@ -141,6 +157,10 @@ export const getTopCustomers = async (req, res) => {
 
     const customers =
       await Order.aggregate([
+
+        {
+          $match: LIVE_ORDER_FILTER,
+        },
 
         // Latest order first so the most recent
         // customer profile is used for demo customers.
@@ -345,12 +365,7 @@ export const getTrendingProducts = async (req, res) => {
       // Seed/demo orders do not have an orderNumber and should not
       // decide what is trending for current customers.
       {
-        $match: {
-          orderNumber: {
-            $exists: true,
-            $nin: [null, ""],
-          },
-        },
+        $match: LIVE_ORDER_FILTER,
       },
 
       {
@@ -459,6 +474,10 @@ export const getSalesTrend = async (req, res) => {
     const trend = await Order.aggregate([
 
       {
+        $match: LIVE_ORDER_FILTER,
+      },
+
+      {
         $group: {
 
           _id: {
@@ -529,6 +548,10 @@ export const getBusinessOverview = async (req, res) => {
       Order.aggregate([
 
         {
+          $match: LIVE_ORDER_FILTER,
+        },
+
+        {
           $group: {
 
             _id: null,
@@ -554,6 +577,10 @@ export const getBusinessOverview = async (req, res) => {
 
 
       Order.aggregate([
+
+        {
+          $match: LIVE_ORDER_FILTER,
+        },
 
         {
           $sort: {
@@ -1089,6 +1116,9 @@ export const getDashboardSummary = async (req, res) => {
 
       Order.aggregate([
         {
+          $match: LIVE_ORDER_FILTER,
+        },
+        {
           $group: {
             _id: null,
 
@@ -1101,12 +1131,13 @@ export const getDashboardSummary = async (req, res) => {
       ]),
 
 
-      Order.countDocuments(),
+      Order.countDocuments(LIVE_ORDER_FILTER),
 
 
       Order.aggregate([
         {
           $match: {
+            ...LIVE_ORDER_FILTER,
             date: {
               $gte:
                 last30DaysStart,
@@ -1130,6 +1161,7 @@ export const getDashboardSummary = async (req, res) => {
 
 
       Order.countDocuments({
+        ...LIVE_ORDER_FILTER,
         date: {
           $gte:
             last30DaysStart,
@@ -1142,6 +1174,7 @@ export const getDashboardSummary = async (req, res) => {
       Order.aggregate([
         {
           $match: {
+            ...LIVE_ORDER_FILTER,
             date: {
               $gte:
                 previous30DaysStart,
@@ -1165,6 +1198,7 @@ export const getDashboardSummary = async (req, res) => {
 
 
       Order.countDocuments({
+        ...LIVE_ORDER_FILTER,
         date: {
           $gte:
             previous30DaysStart,
@@ -1175,7 +1209,8 @@ export const getDashboardSummary = async (req, res) => {
 
 
       Order.distinct(
-        "customerId"
+        "customerId",
+        LIVE_ORDER_FILTER
       ),
 
 

@@ -1259,6 +1259,5 @@ export function createCustomerTools({
     selectPaymentMethodTool,
     placeOrderTool,
     openOrderHistoryTool,
-    trackOrderTool,
   ];
 }
